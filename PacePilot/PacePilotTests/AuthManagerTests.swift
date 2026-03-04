@@ -1,6 +1,7 @@
 import XCTest
 @testable import PacePilot
 
+@MainActor
 final class AuthManagerTests: XCTestCase {
     func test_initialStateIsUnauthenticated_whenNoTokenStored() {
         KeychainHelper.delete(forKey: Constants.Keychain.accessToken)

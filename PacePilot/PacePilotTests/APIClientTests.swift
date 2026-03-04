@@ -1,10 +1,11 @@
 import XCTest
 @testable import PacePilot
 
+@MainActor
 final class APIClientTests: XCTestCase {
     var client: APIClient!
 
-    override func setUp() {
+    override func setUp() async throws {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         let session = URLSession(configuration: config)
