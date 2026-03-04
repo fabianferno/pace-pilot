@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		F69777A02F5827950035C012 /* PacePilotWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = F69777802F5827940035C012 /* PacePilotWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		F69777BB2F5828610035C012 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777B02F5828610035C012 /* Shared.framework */; };
-		F69777C52F5828610035C012 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777B02F5828610035C012 /* Shared.framework */; };
-		F69777C62F5828610035C012 /* Shared.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F69777B02F5828610035C012 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F69777CF2F58330D0035C012 /* Shared.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777B02F5828610035C012 /* Shared.framework */; };
-		F69777D02F58330D0035C012 /* Shared.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F69777B02F5828610035C012 /* Shared.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F69777DB2F58452D0035C012 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777DA2F58452D0035C012 /* HealthKit.framework */; };
 		F69777DD2F5845350035C012 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777DC2F5845350035C012 /* CoreLocation.framework */; };
 		F69777DF2F58453D0035C012 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777DE2F58453D0035C012 /* EventKit.framework */; };
@@ -107,7 +103,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F69777C62F5828610035C012 /* Shared.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -118,7 +113,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				F69777D02F58330D0035C012 /* Shared.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -210,7 +204,6 @@
 				F69777DF2F58453D0035C012 /* EventKit.framework in Frameworks */,
 				F69777DD2F5845350035C012 /* CoreLocation.framework in Frameworks */,
 				F69777DB2F58452D0035C012 /* HealthKit.framework in Frameworks */,
-				F69777C52F5828610035C012 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -235,7 +228,6 @@
 				F69777E92F5845700035C012 /* CoreLocation.framework in Frameworks */,
 				F69777E72F5845670035C012 /* WatchConnectivity.framework in Frameworks */,
 				F69777E52F5845620035C012 /* HealthKit.framework in Frameworks */,
-				F69777CF2F58330D0035C012 /* Shared.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,10 +336,10 @@
 			);
 			dependencies = (
 				F697779F2F5827950035C012 /* PBXTargetDependency */,
-				F69777C42F5828610035C012 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F69777542F5822AF0035C012 /* PacePilot */,
+				F69777B12F5828610035C012 /* Shared */,
 			);
 			name = PacePilot;
 			packageProductDependencies = (
@@ -414,10 +406,10 @@
 			buildRules = (
 			);
 			dependencies = (
-				F69777D22F58330D0035C012 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				F69777812F5827940035C012 /* PacePilotWatch Watch App */,
+				F69777B12F5828610035C012 /* Shared */,
 			);
 			name = "PacePilotWatch Watch App";
 			packageProductDependencies = (

@@ -15,7 +15,7 @@ final class HealthKitService: ObservableObject {
 
     private let readTypes: Set<HKObjectType> = {
         let types: [HKQuantityTypeIdentifier] = [
-            .heartRate, .runningPace, .runningCadence,
+            .heartRate, .runningSpeed,
             .activeEnergyBurned, .distanceWalkingRunning
         ]
         return Set(types.compactMap { HKObjectType.quantityType(forIdentifier: $0) })
@@ -39,10 +39,10 @@ final class HealthKitService: ObservableObject {
             anchor: nil,
             limit: HKObjectQueryNoLimit
         ) { [weak self] _, samples, _, _, _ in
-            self?.processHRSamples(samples)
+            Task { @MainActor [weak self] in self?.processHRSamples(samples) }
         }
         query.updateHandler = { [weak self] _, samples, _, _, _ in
-            self?.processHRSamples(samples)
+            Task { @MainActor [weak self] in self?.processHRSamples(samples) }
         }
         store.execute(query)
         heartRateQuery = query

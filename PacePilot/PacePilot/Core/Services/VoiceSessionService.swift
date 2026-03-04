@@ -1,6 +1,8 @@
 import Foundation
 import Combine
+#if canImport(Daily)
 import Daily
+#endif
 
 enum VoiceSessionState: Equatable {
     case idle, connecting, active, disconnecting, error(String)
@@ -14,7 +16,9 @@ final class VoiceSessionService: NSObject, ObservableObject {
     @Published private(set) var agentSpeaking = false
 
     private let apiClient: APIClient
+#if canImport(Daily)
     private var callClient: CallClient?
+#endif
     private var biometricTimer: Timer?
     private var currentSessionId: String?
 
@@ -39,7 +43,9 @@ final class VoiceSessionService: NSObject, ObservableObject {
     func endSession() async {
         sessionState = .disconnecting
         stopBiometricStreaming()
+#if canImport(Daily)
         callClient?.leave()
+#endif
         if let id = currentSessionId {
             struct EndRequest: Encodable { let sessionId: String }
             _ = try? await apiClient.post("/api/voice/end", body: EndRequest(sessionId: id)) as AgentSession
@@ -80,6 +86,7 @@ final class VoiceSessionService: NSObject, ObservableObject {
     }
 
     private func connectToDaily(roomURL: String, token: String) async {
+#if canImport(Daily)
         guard let url = URL(string: roomURL) else {
             sessionState = .error("Invalid room URL")
             return
@@ -93,9 +100,13 @@ final class VoiceSessionService: NSObject, ObservableObject {
         } catch {
             sessionState = .error(error.localizedDescription)
         }
+#else
+        sessionState = .error("Daily SDK not available — add SPM package")
+#endif
     }
 }
 
+#if canImport(Daily)
 extension VoiceSessionService: CallClientDelegate {
     func callClient(_ client: CallClient, participantUpdated participant: Participant) {
         agentSpeaking = participant.media?.audio?.state == .playable && !participant.info.isLocal
@@ -107,3 +118,4 @@ extension VoiceSessionService: CallClientDelegate {
         }
     }
 }
+#endif

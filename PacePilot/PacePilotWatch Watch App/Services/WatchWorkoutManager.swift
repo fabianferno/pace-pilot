@@ -73,9 +73,9 @@ extension WatchWorkoutManager: HKLiveWorkoutBuilderDelegate {
             case HKQuantityType(.heartRate):
                 let bpm = stats?.mostRecentQuantity()?.doubleValue(for: HKUnit(from: "count/min")) ?? 0
                 Task { @MainActor in self.heartRate = bpm }
-            case HKQuantityType(.runningPace):
-                let secPerMeter = stats?.mostRecentQuantity()?.doubleValue(for: HKUnit(from: "s/m")) ?? 0
-                Task { @MainActor in self.pace = secPerMeter * 1000 }
+            case HKQuantityType(.runningSpeed):
+                let mps = stats?.mostRecentQuantity()?.doubleValue(for: HKUnit.meter().unitDivided(by: .second())) ?? 0
+                Task { @MainActor in self.pace = mps > 0 ? 1000.0 / mps : 0 }
             default:
                 break
             }

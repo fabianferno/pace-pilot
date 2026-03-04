@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 enum APIError: Error, LocalizedError {
     case invalidURL

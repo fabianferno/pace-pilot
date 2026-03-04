@@ -15,7 +15,7 @@ struct WaveformView: View {
                 path.move(to: CGPoint(x: 0, y: midY))
                 for x in stride(from: 0, through: width, by: 2) {
                     let relX = x / width
-                    let y = midY + amplitude * sin(relX * 4 * .pi + phase)
+                    let y = midY + amplitude * sin(relX * 4 * Double.pi + phase)
                     path.addLine(to: CGPoint(x: x, y: y))
                 }
                 context.stroke(path, with: .color(.orange), lineWidth: 3)
