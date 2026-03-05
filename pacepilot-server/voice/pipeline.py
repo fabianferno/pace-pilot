@@ -33,6 +33,8 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
         from pipecat.transports.services.daily import DailyParams, DailyTransport
         from pipecat.services.google.gemini_live import GeminiLiveVertexLLMService
         from pipecat.services.llm_service import FunctionCallParams
+        from pipecat.processors.aggregators.llm_context import LLMContext
+        from pipecat.processors.aggregators.llm_response_universal import LLMContextAggregatorPair
 
         settings = get_settings()
         system_prompt = SESSION_TYPE_PROMPTS.get(session_type, SESSION_TYPE_PROMPTS["general"])
@@ -52,22 +54,32 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             credentials_path=credentials_path,
             project_id=settings.GCP_PROJECT_ID,
             location=settings.GCP_REGION,
-            model="models/gemini-2.5-flash-native-audio-preview-12-2025",
+            model="google/gemini-live-2.5-flash-native-audio",
             voice_id="Charon",
             system_instruction=system_prompt,
             tools=PACEPILOT_TOOLS,
         )
 
-        @llm.event_handler("on_function_call")
-        async def handle_tool_call(name: str, arguments: dict):
-            handler = TOOL_HANDLERS.get(name)
+        async def handle_tool_call(params: FunctionCallParams):
+            handler = TOOL_HANDLERS.get(params.function_name)
             if handler:
-                result = await handler(user_id=user_id, session_id=session_id, **arguments)
-                await llm.push_function_result(name, result)
+                result = await handler(user_id=user_id, session_id=session_id, **params.arguments)
             else:
-                await llm.push_function_result(name, {"error": f"Unknown tool: {name}"})
+                result = {"error": f"Unknown tool: {params.function_name}"}
+            await params.result_callback(result)
 
-        pipeline = Pipeline([transport.input(), llm, transport.output()])
+        llm.register_function(None, handle_tool_call)
+
+        context = LLMContext()
+        context_aggregator = LLMContextAggregatorPair(context)
+
+        pipeline = Pipeline([
+            transport.input(),
+            context_aggregator.user(),
+            llm,
+            context_aggregator.assistant(),
+            transport.output(),
+        ])
         task = PipelineTask(pipeline)
         runner = PipelineRunner()
         await runner.run(task)
