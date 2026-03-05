@@ -29,4 +29,6 @@ class RaceRepository:
     async def create(self, data: dict) -> RaceDB:
         result = await self.col.insert_one(data)
         doc = await self.col.find_one({"_id": result.inserted_id})
+        if doc is None:
+            raise RuntimeError(f"Race document not found after insert (inserted_id={result.inserted_id})")
         return RaceDB(**doc)
