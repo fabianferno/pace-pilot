@@ -10,7 +10,6 @@ final class CoachChatViewModel: ObservableObject {
     @Published var agentSpeaking = false
 
     private let voice = VoiceSessionService.shared
-    private var cancellables = Set<AnyCancellable>()
 
     init() {
         voice.$sessionState.assign(to: &$sessionState)
@@ -327,7 +326,6 @@ final class ReplanViewModel: ObservableObject {
     @Published var agentSpeaking = false
 
     private let voice = VoiceSessionService.shared
-    private var cancellables = Set<AnyCancellable>()
 
     init() {
         voice.$sessionState.assign(to: &$sessionState)
