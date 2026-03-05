@@ -3,6 +3,7 @@ import SwiftUI
 @main
 struct PacePilotWatchApp: App {
     @StateObject private var connectivity = WatchConnectivityManager.shared
+    @StateObject private var workout = WatchWorkoutManager.shared
 
     var body: some Scene {
         WindowGroup {
@@ -11,6 +12,7 @@ struct PacePilotWatchApp: App {
                     .navigationTitle("PacePilot")
             }
             .environmentObject(connectivity)
+            .environmentObject(workout)
         }
     }
 }

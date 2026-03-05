@@ -14,6 +14,7 @@ final class VoiceSessionService: NSObject, ObservableObject {
 
     @Published private(set) var sessionState: VoiceSessionState = .idle
     @Published private(set) var agentSpeaking = false
+    @Published private(set) var botAudioReady = false
 
     private let apiClient: APIClient
 #if canImport(Daily)
@@ -41,6 +42,7 @@ final class VoiceSessionService: NSObject, ObservableObject {
     }
 
     func endSession() async {
+        botAudioReady = false
         sessionState = .disconnecting
         stopBiometricStreaming()
 #if canImport(Daily)
@@ -109,7 +111,10 @@ final class VoiceSessionService: NSObject, ObservableObject {
 #if canImport(Daily)
 extension VoiceSessionService: CallClientDelegate {
     func callClient(_ client: CallClient, participantUpdated participant: Participant) {
-        agentSpeaking = participant.media?.microphone.state == .playable && !participant.info.isLocal
+        guard !participant.info.isLocal else { return }
+        let audioPlayable = participant.media?.microphone.state == .playable
+        agentSpeaking = audioPlayable
+        if audioPlayable { botAudioReady = true }
     }
 
     func callClient(_ client: CallClient, callStateUpdated state: CallState) {

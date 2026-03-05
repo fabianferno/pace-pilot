@@ -100,7 +100,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
 
         @transport.event_handler("on_first_participant_joined")
         async def on_first_participant_joined(transport, participant):
-            await asyncio.sleep(1)  # let GeminiLive finish connecting
+            await asyncio.sleep(3)  # wait for GeminiLive + iOS audio track subscription to be ready
             await task.queue_frame(InputTextRawFrame(text=greeting_trigger))
 
         await runner.run(task)

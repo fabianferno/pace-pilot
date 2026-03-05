@@ -7,8 +7,7 @@ struct TrainingPlan: Codable, Identifiable {
     let endDate: Date
     let phase: Phase
     let paceZones: PaceZones
-    let hrZones: HRZones
-    let weeklyWorkouts: [String: [String]] // week number -> workout IDs
+    let hrZones: HRZones?
     var isActive: Bool
 
     enum Phase: String, Codable {

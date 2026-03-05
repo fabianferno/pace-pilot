@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSHealthShareUsageDescription</key>
+	<string>PacePilot reads heart rate, pace, and workout data from your Apple Watch to coach you during runs.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>PacePilot saves your workouts to Apple Health.</string>
 	<key>UIBackgroundModes</key>
 	<array/>
 	<key>WKBackgroundModes</key>

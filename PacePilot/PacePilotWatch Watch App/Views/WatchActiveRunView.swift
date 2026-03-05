@@ -2,18 +2,17 @@ import SwiftUI
 
 struct WatchActiveRunView: View {
     @EnvironmentObject var connectivity: WatchConnectivityManager
+    @EnvironmentObject var workout: WatchWorkoutManager
 
     var body: some View {
         VStack(spacing: 8) {
-            if let state = connectivity.runState {
-                metricRow(value: RunTimeFormatter.format(seconds: state.elapsedSeconds), label: "TIME")
-                metricRow(value: String(format: "%.2f", state.distanceKm), label: "KM")
-                metricRow(value: PaceFormatter.format(secondsPerKm: state.paceSecondsPerKm), label: "/KM")
-            } else {
-                ProgressView()
-            }
+            metricRow(value: RunTimeFormatter.format(seconds: workout.elapsedSeconds), label: "TIME")
+            metricRow(value: String(format: "%.2f", workout.distanceKm), label: "KM")
+            metricRow(value: workout.pace > 0 ? PaceFormatter.format(secondsPerKm: workout.pace) : "--:--", label: "/KM")
+            metricRow(value: workout.heartRate > 0 ? "\(Int(workout.heartRate))" : "--", label: "BPM")
             Button(action: {
                 connectivity.sendRunCommand(RunCommand(command: .stop))
+                Task { try? await workout.endWorkout() }
             }) {
                 Image(systemName: "stop.fill")
             }

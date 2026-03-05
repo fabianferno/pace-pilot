@@ -9,12 +9,16 @@ final class WatchWorkoutManager: NSObject, ObservableObject {
 
     @Published private(set) var heartRate: Double = 0
     @Published private(set) var pace: Double = 0  // seconds/km
+    @Published private(set) var distanceKm: Double = 0
+    @Published private(set) var elapsedSeconds: Int = 0
     @Published private(set) var isRunning = false
 
     private let store = HKHealthStore()
     private var workoutSession: HKWorkoutSession?
     private var workoutBuilder: HKLiveWorkoutBuilder?
     private var streamTimer: Timer?
+    private var elapsedTimer: Timer?
+    private var startDate: Date?
 
     private let connectivity = WatchConnectivityManager.shared
 
@@ -29,9 +33,19 @@ final class WatchWorkoutManager: NSObject, ObservableObject {
         builder.delegate = self
         workoutSession = session
         workoutBuilder = builder
-        session.startActivity(with: Date())
-        try await builder.beginCollection(at: Date())
+        let now = Date()
+        session.startActivity(with: now)
+        try await builder.beginCollection(at: now)
+        startDate = now
         isRunning = true
+
+        // Track elapsed time every second
+        elapsedTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                guard let self, let start = self.startDate else { return }
+                self.elapsedSeconds = Int(Date().timeIntervalSince(start))
+            }
+        }
 
         // Stream biometrics to phone every 3s
         streamTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] _ in
@@ -42,6 +56,9 @@ final class WatchWorkoutManager: NSObject, ObservableObject {
     func endWorkout() async throws {
         streamTimer?.invalidate()
         streamTimer = nil
+        elapsedTimer?.invalidate()
+        elapsedTimer = nil
+        startDate = nil
         guard let session = workoutSession, let builder = workoutBuilder else { return }
         session.end()
         try await builder.endCollection(at: Date())
@@ -49,6 +66,10 @@ final class WatchWorkoutManager: NSObject, ObservableObject {
         workoutSession = nil
         workoutBuilder = nil
         isRunning = false
+        distanceKm = 0
+        elapsedSeconds = 0
+        heartRate = 0
+        pace = 0
     }
 
     private func streamBiometrics() {
@@ -76,6 +97,9 @@ extension WatchWorkoutManager: HKLiveWorkoutBuilderDelegate {
             case HKQuantityType(.runningSpeed):
                 let mps = stats?.mostRecentQuantity()?.doubleValue(for: HKUnit.meter().unitDivided(by: .second())) ?? 0
                 Task { @MainActor in self.pace = mps > 0 ? 1000.0 / mps : 0 }
+            case HKQuantityType(.distanceWalkingRunning):
+                let meters = stats?.sumQuantity()?.doubleValue(for: .meter()) ?? 0
+                Task { @MainActor in self.distanceKm = meters / 1000 }
             default:
                 break
             }

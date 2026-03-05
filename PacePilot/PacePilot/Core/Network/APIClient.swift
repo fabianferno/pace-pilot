@@ -34,6 +34,11 @@ final class APIClient: ObservableObject {
             if let date = formatter.date(from: str) { return date }
             formatter.formatOptions = [.withInternetDateTime]
             if let date = formatter.date(from: str) { return date }
+            // Fallback: timezone-naive ISO 8601 (Motor/MongoDB returns naive datetimes)
+            formatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime]
+            if let date = formatter.date(from: str) { return date }
+            formatter.formatOptions = [.withFullDate, .withTime, .withColonSeparatorInTime, .withFractionalSeconds]
+            if let date = formatter.date(from: str) { return date }
             throw DecodingError.dataCorruptedError(in: container, debugDescription: "Cannot decode date: \(str)")
         }
         return d

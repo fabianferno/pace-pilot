@@ -8,6 +8,7 @@ final class ActiveRunViewModel: ObservableObject {
     @Published var elapsedSeconds: Int = 0
     @Published var heartRate: Double = 0
     @Published var agentSpeaking = false
+    @Published var botAudioReady = false
     @Published var isRunning = false
     @Published var error: String?
 
@@ -20,12 +21,13 @@ final class ActiveRunViewModel: ObservableObject {
 
     init() {
         location.$currentPaceSecondsPerKm
-            .map { PaceFormatter.format(secondsPerKm: $0) }
+            .map { $0 > 0 ? PaceFormatter.format(secondsPerKm: $0) : "--:--" }
             .assign(to: &$pace)
         location.$distanceKm.assign(to: &$distanceKm)
         workout.$elapsedSeconds.assign(to: &$elapsedSeconds)
         health.$heartRate.assign(to: &$heartRate)
         voice.$agentSpeaking.assign(to: &$agentSpeaking)
+        voice.$botAudioReady.assign(to: &$botAudioReady)
 
         // Forward state to Watch
         Publishers.CombineLatest3(location.$distanceKm, workout.$elapsedSeconds, location.$currentPaceSecondsPerKm)
@@ -40,11 +42,18 @@ final class ActiveRunViewModel: ObservableObject {
     func startRun() async {
         do {
             try await health.requestAuthorization()
+            location.requestAuthorization()
             try await workout.startWorkout()
             location.startTracking()
             health.startHeartRateUpdates()
             await voice.startSession(type: .activeRun)
             voice.startBiometricStreaming()
+            // Wait for bot audio track to become playable so we don't miss the greeting.
+            // Timeout after 10s to avoid blocking indefinitely if bot never joins.
+            let deadline = Date().addingTimeInterval(10)
+            while !voice.botAudioReady && Date() < deadline {
+                try await Task.sleep(nanoseconds: 100_000_000)
+            }
             isRunning = true
         } catch {
             self.error = error.localizedDescription
