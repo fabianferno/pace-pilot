@@ -11,6 +11,9 @@ struct User: Codable, Identifiable, Equatable {
     var weeklyMileageGoal: Double?
     var targetRaceDistance: String?
     var targetRaceDate: Date?
+    var restingHr: Int?
+    var maxHr: Int?
+    var preferredDays: [Int]
 
     enum CommunityTier: String, Codable {
         case discovery, foundation, momentum, velocity, elite

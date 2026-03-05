@@ -1,6 +1,10 @@
 import SwiftUI
 import AuthenticationServices
 
+extension Notification.Name {
+    static let stravaConnected = Notification.Name("stravaConnected")
+}
+
 @main
 struct PacePilotApp: App {
     @StateObject private var router = AppRouter.shared
@@ -14,6 +18,11 @@ struct PacePilotApp: App {
                 .environmentObject(auth)
                 .environmentObject(apiClient)
                 .task { await auth.validateSession() }
+                .onOpenURL { url in
+                    if url.host == "strava-connected" {
+                        NotificationCenter.default.post(name: .stravaConnected, object: nil)
+                    }
+                }
         }
     }
 }
@@ -37,12 +46,14 @@ struct SplashView: View {
         ZStack {
             Color.black.ignoresSafeArea()
             VStack(spacing: 32) {
-                Image(systemName: "figure.run")
-                    .font(.system(size: 80))
-                    .foregroundColor(.white)
+                Image("AppLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 Text("PacePilot")
                     .font(.largeTitle.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(.accentColor)
                 SignInWithAppleButton(.signIn) { request in
                     request.requestedScopes = [.fullName, .email]
                 } onCompletion: { _ in
@@ -69,6 +80,6 @@ struct MainTabView: View {
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person.fill") }
         }
-        .accentColor(.orange)
+        .accentColor(.accentColor)
     }
 }

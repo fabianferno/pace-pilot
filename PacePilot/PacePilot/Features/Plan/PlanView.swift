@@ -9,7 +9,7 @@ struct PlanView: View {
             VStack {
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
-                    .accentColor(.orange)
+                    .accentColor(.accentColor)
                     .padding(.horizontal)
                 workoutsForSelectedDate
             }

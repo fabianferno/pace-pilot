@@ -6,7 +6,7 @@ STRAVA_API_BASE = "https://www.strava.com/api/v3"
 
 
 class StravaService:
-    def get_auth_url(self) -> str:
+    def get_auth_url(self, user_id: str) -> str:
         s = get_settings()
         return (
             f"https://www.strava.com/oauth/authorize"
@@ -14,6 +14,7 @@ class StravaService:
             f"&redirect_uri={s.STRAVA_REDIRECT_URI}"
             f"&response_type=code"
             f"&scope=activity:read_all,activity:write"
+            f"&state={user_id}"
         )
 
     async def exchange_code(self, code: str) -> dict:

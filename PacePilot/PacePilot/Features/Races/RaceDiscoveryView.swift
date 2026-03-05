@@ -11,7 +11,7 @@ struct RaceDiscoveryView: View {
                         Text(race.name).font(.headline)
                         Spacer()
                         if race.isInterestedByUser {
-                            Image(systemName: "star.fill").foregroundColor(.orange)
+                            Image(systemName: "star.fill").foregroundColor(.accentColor)
                         }
                     }
                     HStack(spacing: 12) {
@@ -24,7 +24,7 @@ struct RaceDiscoveryView: View {
                 .swipeActions {
                     if !race.isInterestedByUser {
                         Button("Interested") { Task { await vm.markInterest(race.id) } }
-                            .tint(.orange)
+                            .tint(.accentColor)
                     }
                 }
             }

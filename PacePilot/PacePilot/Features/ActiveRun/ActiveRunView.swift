@@ -17,7 +17,7 @@ struct ActiveRunView: View {
         }
         .statusBarHidden()
         .task { await vm.startRun() }
-        .fullScreenCover(isPresented: $showPostRun) {
+        .fullScreenCover(isPresented: $showPostRun, onDismiss: { dismiss() }) {
             if let result = runResult {
                 PostRunView(runRequest: result)
             }
@@ -26,7 +26,7 @@ struct ActiveRunView: View {
 
     var startPrompt: some View {
         VStack(spacing: 24) {
-            ProgressView().tint(.orange).scaleEffect(1.5)
+            ProgressView().tint(.accentColor).scaleEffect(1.5)
             Text("Getting ready...").foregroundColor(.white)
         }
     }
@@ -50,9 +50,9 @@ struct ActiveRunView: View {
                 if vm.agentSpeaking {
                     Label("Coach", systemImage: "waveform")
                         .font(.caption)
-                        .foregroundColor(.orange)
+                        .foregroundColor(.accentColor)
                         .padding(8)
-                        .background(Color.orange.opacity(0.2))
+                        .background(Color.accentColor.opacity(0.2))
                         .cornerRadius(8)
                 }
             }

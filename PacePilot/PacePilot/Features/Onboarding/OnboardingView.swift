@@ -20,6 +20,7 @@ final class OnboardingViewModel: ObservableObject {
 
     func endOnboarding() async {
         await voice.endSession()
+        await AuthManager.shared.validateSession()
     }
 }
 
@@ -31,9 +32,11 @@ struct OnboardingView: View {
             Color.black.ignoresSafeArea()
             VStack(spacing: 48) {
                 Spacer()
-                Image(systemName: "figure.run.circle")
-                    .font(.system(size: 80))
-                    .foregroundColor(.orange)
+                Image("AppLogo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                 Text("Meet Your Coach")
                     .font(.title.bold())
                     .foregroundColor(.white)
@@ -59,9 +62,9 @@ struct OnboardingView: View {
         case .idle:
             Text("Tap to start").foregroundColor(.gray)
         case .connecting:
-            Text("Connecting...").foregroundColor(.orange)
+            Text("Connecting...").foregroundColor(.accentColor)
         case .active:
-            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.green)
+            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.accentColor)
         case .disconnecting:
             Text("Finishing up...").foregroundColor(.gray)
         case .error(let msg):
@@ -75,9 +78,9 @@ struct OnboardingView: View {
         case .idle, .error:
             Button(action: { Task { await vm.startOnboarding() } }) {
                 Circle()
-                    .fill(Color.orange)
+                    .fill(Color.accentColor)
                     .frame(width: 80, height: 80)
-                    .overlay(Image(systemName: "mic.fill").font(.title).foregroundColor(.white))
+                    .overlay(Image(systemName: "mic.fill").font(.title).foregroundColor(.black))
             }
         case .active:
             Button(action: { Task { await vm.endOnboarding() } }) {
@@ -87,7 +90,7 @@ struct OnboardingView: View {
                     .overlay(Image(systemName: "stop.fill").font(.title).foregroundColor(.white))
             }
         default:
-            ProgressView().tint(.orange)
+            ProgressView().tint(.accentColor)
         }
     }
 }

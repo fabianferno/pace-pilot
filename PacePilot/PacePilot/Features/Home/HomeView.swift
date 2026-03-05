@@ -19,7 +19,16 @@ struct HomeView: View {
                 .padding()
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("PacePilot")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Image("AppLogo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(height: 32)
+                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                }
+            }
             .task { await vm.load() }
             .fullScreenCover(isPresented: $showActiveRun) {
                 ActiveRunView()
@@ -81,10 +90,10 @@ struct HomeView: View {
         Button(action: { showActiveRun = true }) {
             Label("Start Run", systemImage: "figure.run")
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(Color.orange)
+                .background(Color.accentColor)
                 .cornerRadius(16)
         }
     }

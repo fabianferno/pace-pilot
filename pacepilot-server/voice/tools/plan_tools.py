@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from db.repositories.plan_repo import PlanRepository
+from db.repositories.user_repo import UserRepository
 from db.repositories.workout_repo import WorkoutRepository
 from db.models import TrainingPlanDB
 from services.pace_calculator import PaceCalculator
@@ -55,6 +56,7 @@ async def generate_training_plan(user_id: str, benchmark_distance_km: float = 5.
                                          weeks=weeks, preferred_days=preferred_days, pace_zones=pace_zones)
     workout_repo = WorkoutRepository()
     await workout_repo.create_many(workouts)
+    await UserRepository().update(user_id, {"onboarding_complete": True})
     return {
         "plan_id": plan_id,
         "workout_count": len(workouts),

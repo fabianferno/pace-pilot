@@ -34,14 +34,14 @@ struct PostRunView: View {
 
     var debriefBanner: some View {
         HStack {
-            Image(systemName: "waveform").foregroundColor(.orange)
+            Image(systemName: "waveform").foregroundColor(.accentColor)
             Text("Coach debrief in progress...")
                 .font(.subheadline)
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
             Spacer()
         }
         .padding()
-        .background(Color.orange.opacity(0.1))
+        .background(Color.accentColor.opacity(0.1))
         .cornerRadius(12)
     }
 
@@ -81,7 +81,7 @@ struct PostRunView: View {
         )
         return Map(initialPosition: .region(region)) {
             MapPolyline(coordinates: coords)
-                .stroke(.orange, lineWidth: 3)
+                .stroke(Color.accentColor, lineWidth: 3)
         }
         .frame(height: 200)
         .cornerRadius(16)

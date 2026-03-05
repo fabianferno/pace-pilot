@@ -52,7 +52,6 @@ final class ActiveRunViewModel: ObservableObject {
     }
 
     func stopRun() async -> NewRunRequest? {
-        isRunning = false
         voice.stopBiometricStreaming()
         await voice.endSession()
         health.stopHeartRateUpdates()
@@ -60,6 +59,7 @@ final class ActiveRunViewModel: ObservableObject {
         _ = try? await workout.endWorkout()
 
         watch.send(RunStateUpdate(distanceKm: location.distanceKm, elapsedSeconds: workout.elapsedSeconds, paceSecondsPerKm: location.currentPaceSecondsPerKm, isActive: false))
+        isRunning = false
 
         return NewRunRequest(
             workoutId: nil,

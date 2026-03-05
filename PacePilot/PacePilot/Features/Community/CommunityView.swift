@@ -20,7 +20,7 @@ struct CommunityView: View {
                 Section("This Week's Leaderboard") {
                     ForEach(vm.leaderboard) { entry in
                         HStack {
-                            Text("#\(entry.rank)").font(.headline).foregroundColor(.orange).frame(width: 36)
+                            Text("#\(entry.rank)").font(.headline).foregroundColor(.accentColor).frame(width: 36)
                             Text(entry.displayName)
                             Spacer()
                             Text(String(format: "%.1f km", entry.weeklyDistanceKm)).foregroundColor(.secondary)
