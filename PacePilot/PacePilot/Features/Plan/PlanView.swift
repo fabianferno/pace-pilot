@@ -3,6 +3,7 @@ import SwiftUI
 struct PlanView: View {
     @StateObject private var vm = PlanViewModel()
     @State private var selectedDate = Date()
+    @State private var showReplanSheet = false
 
     var body: some View {
         NavigationStack {
@@ -11,10 +12,41 @@ struct PlanView: View {
                     .datePickerStyle(.graphical)
                     .accentColor(.accentColor)
                     .padding(.horizontal)
+                emptyPlanBanner
                 workoutsForSelectedDate
             }
             .navigationTitle("Training Plan")
             .task { await vm.load() }
+            .sheet(isPresented: $showReplanSheet) {
+                ReplanSheet()
+            }
+        }
+    }
+
+    @ViewBuilder
+    var emptyPlanBanner: some View {
+        if !vm.isLoading && vm.plan == nil {
+            VStack(spacing: 12) {
+                Image(systemName: "figure.run.circle")
+                    .font(.system(size: 48))
+                    .foregroundColor(.secondary)
+                Text("No training plan yet")
+                    .font(.headline)
+                Text("Talk to your coach to create a personalised plan.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                Button(action: { showReplanSheet = true }) {
+                    Label("Create Training Plan", systemImage: "mic.fill")
+                        .font(.subheadline.bold())
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 10)
+                        .background(Color.accentColor)
+                        .foregroundColor(.black)
+                        .clipShape(Capsule())
+                }
+            }
+            .padding(32)
         }
     }
 
