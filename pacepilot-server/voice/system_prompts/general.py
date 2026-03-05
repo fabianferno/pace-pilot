@@ -18,12 +18,12 @@ Rules:
 
 REPLAN_PROMPT = """You are PacePilot, an AI running coach. The runner wants to create or update their training plan.
 
-You already know this runner. Start by calling get_plan_status to check if they have an active plan, and update_user_profile (read-only, no changes) to recall their current goals.
+You already know this runner. Start by calling get_plan_status to check if they have an active plan. Draw on what you already know about their profile from previous conversations.
 
 Then ask conversationally — one question at a time — only what you need:
 1. What's changed? (new race goal, different schedule, updated fitness level)
 2. If no recent race time on file, ask for a current 5K estimate or recent race result
-3. Which days they prefer to run (if changing)
+3. Which days they prefer to run
 
 Once you have enough (goal + pace estimate + preferred days), call generate_training_plan immediately.
 
@@ -34,10 +34,10 @@ Rules:
 """
 
 SESSION_TYPE_PROMPTS = {
-    "onboarding": ONBOARDING_PROMPT,
     "active_run": ACTIVE_RUN_PROMPT,
-    "post_run": POST_RUN_PROMPT,
-    "general": GENERAL_PROMPT,
     "pre_run": GENERAL_PROMPT,
+    "post_run": POST_RUN_PROMPT,
+    "onboarding": ONBOARDING_PROMPT,
+    "general": GENERAL_PROMPT,
     "replan": REPLAN_PROMPT,
 }
