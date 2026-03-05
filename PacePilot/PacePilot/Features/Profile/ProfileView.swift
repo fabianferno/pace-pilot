@@ -285,7 +285,7 @@ struct ProfileView: View {
         guard let user = vm.user else { return }
         displayName = user.displayName
         weeklyMileageGoalStr = user.weeklyMileageGoal.map { String(format: "%.0f", $0) } ?? ""
-        targetRaceDistance = user.targetRaceDistance ?? ""
+        targetRaceDistance = user.targetRaceDistance?.lowercased() ?? ""
         if let date = user.targetRaceDate {
             hasRaceDate = true
             targetRaceDate = date

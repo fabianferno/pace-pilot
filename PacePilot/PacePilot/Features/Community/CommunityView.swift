@@ -6,33 +6,66 @@ struct CommunityView: View {
     var body: some View {
         NavigationStack {
             List {
+                howItWorksSection
+
                 if let community = vm.community {
                     Section("Your Tier") {
-                        HStack {
+                        HStack(spacing: 14) {
                             tierBadge(community.tier)
-                            VStack(alignment: .leading) {
-                                Text(community.name).font(.headline)
-                                Text("\(community.memberCount) runners").font(.caption).foregroundColor(.secondary)
+                            VStack(alignment: .leading, spacing: 3) {
+                                if !community.name.isEmpty {
+                                    Text(community.name).font(.headline)
+                                }
+                                Text("\(community.memberCount) runners")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
+                            Spacer()
+                        }
+                        .padding(.vertical, 4)
+                    }
+                }
+
+                Section("This Week's Leaderboard") {
+                    if vm.leaderboard.isEmpty && !vm.isLoading {
+                        emptySection(
+                            icon: "trophy",
+                            title: "No runs yet this week",
+                            message: "Complete a run to appear on the leaderboard."
+                        )
+                    } else {
+                        ForEach(vm.leaderboard) { entry in
+                            HStack {
+                                Text("#\(entry.rank)")
+                                    .font(.headline)
+                                    .foregroundColor(.accentColor)
+                                    .frame(width: 36)
+                                Text(entry.displayName)
+                                Spacer()
+                                Text(String(format: "%.1f km", entry.weeklyDistanceKm))
+                                    .foregroundColor(.secondary)
                             }
                         }
                     }
                 }
-                Section("This Week's Leaderboard") {
-                    ForEach(vm.leaderboard) { entry in
-                        HStack {
-                            Text("#\(entry.rank)").font(.headline).foregroundColor(.accentColor).frame(width: 36)
-                            Text(entry.displayName)
-                            Spacer()
-                            Text(String(format: "%.1f km", entry.weeklyDistanceKm)).foregroundColor(.secondary)
-                        }
-                    }
-                }
+
                 Section("Friend Activity") {
-                    ForEach(vm.friendActivity) { activity in
-                        VStack(alignment: .leading) {
-                            Text(activity.displayName).font(.headline)
-                            Text(String(format: "%.1f km · %@/km", activity.distanceKm, PaceFormatter.format(secondsPerKm: activity.paceSecondsPerKm)))
-                                .font(.caption).foregroundColor(.secondary)
+                    if vm.friendActivity.isEmpty && !vm.isLoading {
+                        emptySection(
+                            icon: "person.2",
+                            title: "No recent activity",
+                            message: "Your friends' runs will show up here."
+                        )
+                    } else {
+                        ForEach(vm.friendActivity) { activity in
+                            VStack(alignment: .leading) {
+                                Text(activity.displayName).font(.headline)
+                                Text(String(format: "%.1f km · %@/km",
+                                            activity.distanceKm,
+                                            PaceFormatter.format(secondsPerKm: activity.paceSecondsPerKm)))
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                            }
                         }
                     }
                 }
@@ -42,15 +75,50 @@ struct CommunityView: View {
         }
     }
 
+    var howItWorksSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 10) {
+                Label("How Community Works", systemImage: "info.circle")
+                    .font(.subheadline.bold())
+                    .foregroundColor(.accentColor)
+                Text("You're automatically placed into a tier based on your average easy-run pace over the past 4 weeks. As you run more consistently, you move up through **Discovery → Foundation → Momentum → Velocity → Elite**. Tiers update every week.")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    func emptySection(icon: String, title: String, message: String) -> some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(.accentColor.opacity(0.7))
+                .frame(width: 40)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title).font(.subheadline.bold())
+                Text(message).font(.caption).foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 6)
+    }
+
     func tierBadge(_ tier: User.CommunityTier) -> some View {
         let colors: [User.CommunityTier: Color] = [
-            .discovery: .gray, .foundation: .blue, .momentum: .green, .velocity: .orange, .elite: .purple
+            .discovery: .secondary,
+            .foundation: .accentColor,
+            .momentum: .accentColor,
+            .velocity: .orange,
+            .elite: .purple
         ]
+        let color = colors[tier, default: .accentColor]
         return Text(tier.rawValue.capitalized)
             .font(.caption.bold())
-            .padding(.horizontal, 10).padding(.vertical, 4)
-            .background(colors[tier, default: .gray].opacity(0.2))
-            .foregroundColor(colors[tier, default: .gray])
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(color.opacity(0.15))
+            .foregroundColor(color)
             .cornerRadius(8)
     }
 }

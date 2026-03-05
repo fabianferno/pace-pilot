@@ -103,7 +103,7 @@ struct HomeView: View {
 
     var restDayCard: some View {
         VStack(spacing: 8) {
-            Image(systemName: "moon.zzz").font(.largeTitle).foregroundColor(.blue)
+            Image(systemName: "moon.zzz").font(.largeTitle).foregroundColor(.accentColor)
             Text("Rest Day").font(.headline)
             Text("Recovery is part of training.").font(.caption).foregroundColor(.secondary)
         }

@@ -21,9 +21,9 @@ final class HomeViewModel: ObservableObject {
         let hour = Calendar.current.component(.hour, from: Date())
         let salutation: String
         switch hour {
-        case 0..<12: salutation = "Good morning"
-        case 12..<17: salutation = "Good afternoon"
-        default:     salutation = "Good evening"
+        case 0..<12: salutation = "GM"
+        case 12..<17: salutation = "Hi"
+        default:     salutation = "Hi"
         }
         return name.isEmpty ? salutation : "\(salutation), \(name)"
     }

@@ -1,5 +1,4 @@
 import SwiftUI
-import AuthenticationServices
 
 extension Notification.Name {
     static let stravaConnected = Notification.Name("stravaConnected")
@@ -54,12 +53,19 @@ struct SplashView: View {
                 Text("PacePilot")
                     .font(.largeTitle.bold())
                     .foregroundColor(.accentColor)
-                SignInWithAppleButton(.signIn) { request in
-                    request.requestedScopes = [.fullName, .email]
-                } onCompletion: { _ in
-                    auth.signInWithApple()
+                Button(action: { auth.signInWithApple() }) {
+                    HStack(spacing: 14) {
+                        Image(systemName: "apple.logo")
+                            .font(.title2.weight(.semibold))
+                        Text("Sign in with Apple")
+                            .font(.headline)
+                    }
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 54)
+                    .background(Color.white)
+                    .cornerRadius(14)
                 }
-                .frame(height: 50)
                 .padding(.horizontal, 40)
             }
         }
