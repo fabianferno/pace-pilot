@@ -9,7 +9,7 @@ struct AgentSession: Codable, Identifiable {
     let transcript: [TranscriptEntry]
 
     enum SessionType: String, Codable {
-        case onboarding, preRun = "pre_run", activeRun = "active_run", postRun = "post_run", general
+        case onboarding, preRun = "pre_run", activeRun = "active_run", postRun = "post_run", general, replan
     }
 
     struct TranscriptEntry: Codable, Identifiable {
