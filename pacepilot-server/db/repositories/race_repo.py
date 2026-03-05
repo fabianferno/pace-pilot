@@ -25,3 +25,8 @@ class RaceRepository:
             {"_id": ObjectId(race_id)},
             {"$addToSet": {"interested_user_ids": user_id}}
         )
+
+    async def create(self, data: dict) -> RaceDB:
+        result = await self.col.insert_one(data)
+        doc = await self.col.find_one({"_id": result.inserted_id})
+        return RaceDB(**doc)
