@@ -1,3 +1,4 @@
+import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from api.middleware.auth import get_current_user_id
@@ -28,6 +29,7 @@ async def create_session(body: CreateSessionRequest, user_id: str = Depends(get_
     try:
         return await session_manager.start_session(user_id=user_id, session_type=body.session_type)
     except Exception as e:
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 

@@ -44,7 +44,7 @@ final class VoiceSessionService: NSObject, ObservableObject {
         sessionState = .disconnecting
         stopBiometricStreaming()
 #if canImport(Daily)
-        callClient?.leave()
+        try? await callClient?.leave()
 #endif
         if let id = currentSessionId {
             struct EndRequest: Encodable { let sessionId: String }
@@ -95,7 +95,7 @@ final class VoiceSessionService: NSObject, ObservableObject {
         client.delegate = self
         callClient = client
         do {
-            try await client.join(url: url, token: .token(token))
+            try await client.join(url: url, token: MeetingToken(stringValue: token))
             sessionState = .active
         } catch {
             sessionState = .error(error.localizedDescription)
@@ -109,11 +109,11 @@ final class VoiceSessionService: NSObject, ObservableObject {
 #if canImport(Daily)
 extension VoiceSessionService: CallClientDelegate {
     func callClient(_ client: CallClient, participantUpdated participant: Participant) {
-        agentSpeaking = participant.media?.audio?.state == .playable && !participant.info.isLocal
+        agentSpeaking = participant.media?.microphone.state == .playable && !participant.info.isLocal
     }
 
     func callClient(_ client: CallClient, callStateUpdated state: CallState) {
-        if state == .left || state == .error {
+        if state == .left {
             sessionState = .idle
         }
     }

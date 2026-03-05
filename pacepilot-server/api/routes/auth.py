@@ -15,11 +15,23 @@ class AppleAuthRequest(BaseModel):
     display_name: Optional[str] = None
 
 
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    display_name: str
+    community_tier: str
+    onboarding_complete: bool
+    strava_connected: bool
+    google_calendar_connected: bool
+    weekly_mileage_goal: Optional[float] = None
+    target_race_distance: Optional[str] = None
+    target_race_date: Optional[str] = None
+
+
 class AuthResponse(BaseModel):
     access_token: str
     refresh_token: str
-    user_id: str
-    onboarding_complete: bool
+    user: UserResponse
 
 
 class RefreshRequest(BaseModel):
@@ -48,16 +60,25 @@ async def apple_auth(body: AppleAuthRequest):
             apple_user_id=apple_user_id,
         )
         user_id = await repo.create(new_user)
-        onboarding_complete = False
-    else:
-        user_id = str(user.id)
-        onboarding_complete = user.onboarding_complete
+        user = await repo.find_by_id(user_id)
 
+    user_id = str(user.id)
+    user_response = UserResponse(
+        id=user_id,
+        email=user.email,
+        display_name=user.display_name,
+        community_tier=user.community_tier,
+        onboarding_complete=user.onboarding_complete,
+        strava_connected=user.strava_connected,
+        google_calendar_connected=user.google_calendar_connected,
+        weekly_mileage_goal=user.weekly_mileage_goal,
+        target_race_distance=user.target_race_distance,
+        target_race_date=user.target_race_date.isoformat() if user.target_race_date else None,
+    )
     return AuthResponse(
         access_token=create_access_token(user_id),
         refresh_token=create_refresh_token(user_id),
-        user_id=user_id,
-        onboarding_complete=onboarding_complete,
+        user=user_response,
     )
 
 

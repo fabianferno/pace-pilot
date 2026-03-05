@@ -20,5 +20,7 @@
 	<string>PacePilot tracks your route during background runs.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>PacePilot schedules your training runs to your calendar.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>PacePilot uses the camera for video calling features.</string>
 </dict>
 </plist>

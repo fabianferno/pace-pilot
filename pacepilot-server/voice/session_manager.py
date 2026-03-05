@@ -1,5 +1,6 @@
 from __future__ import annotations
 import asyncio
+import time
 import httpx
 from datetime import datetime
 from typing import Optional, Dict, List, Tuple
@@ -18,8 +19,10 @@ async def create_daily_room() -> Tuple[str, str, str]:
         room_resp = await client.post(
             "https://api.daily.co/v1/rooms",
             headers={"Authorization": f"Bearer {settings.DAILY_API_KEY}"},
-            json={"properties": {"exp": int(datetime.utcnow().timestamp()) + 3600}},
+            json={"properties": {"exp": int(time.time()) + 3600}},
         )
+        if not room_resp.is_success:
+            print(f"[Daily] room creation failed {room_resp.status_code}: {room_resp.text}")
         room_resp.raise_for_status()
         room_data = room_resp.json()
         room_url = room_data["url"]

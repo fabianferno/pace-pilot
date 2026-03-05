@@ -31,7 +31,8 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
         from pipecat.pipeline.runner import PipelineRunner
         from pipecat.pipeline.task import PipelineTask
         from pipecat.transports.services.daily import DailyParams, DailyTransport
-        from pipecat.services.google import GeminiLiveLLMService, InputParams
+        from pipecat.services.google.gemini_live import GeminiLiveVertexLLMService
+        from pipecat.services.llm_service import FunctionCallParams
 
         settings = get_settings()
         system_prompt = SESSION_TYPE_PROMPTS.get(session_type, SESSION_TYPE_PROMPTS["general"])
@@ -41,8 +42,16 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             DailyParams(audio_out_enabled=True, audio_in_enabled=True),
         )
 
-        llm = GeminiLiveLLMService(
-            api_key=settings.GCP_PROJECT_ID,
+        credentials = settings.GOOGLE_APPLICATION_CREDENTIALS_JSON.strip() or None
+        credentials_path = settings.GOOGLE_APPLICATION_CREDENTIALS.strip() or None
+        if credentials:
+            credentials_path = None
+
+        llm = GeminiLiveVertexLLMService(
+            credentials=credentials,
+            credentials_path=credentials_path,
+            project_id=settings.GCP_PROJECT_ID,
+            location=settings.GCP_REGION,
             model="models/gemini-2.5-flash-native-audio-preview-12-2025",
             voice_id="Charon",
             system_instruction=system_prompt,

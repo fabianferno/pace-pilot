@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     GCP_PROJECT_ID: str
     GCP_REGION: str = "us-central1"
     GOOGLE_APPLICATION_CREDENTIALS: str = ""
+    GOOGLE_APPLICATION_CREDENTIALS_JSON: str = ""
     DAILY_API_KEY: str
     STRAVA_CLIENT_ID: str = ""
     STRAVA_CLIENT_SECRET: str = ""

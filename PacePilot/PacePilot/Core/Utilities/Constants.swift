@@ -2,7 +2,7 @@ import Foundation
 
 enum Constants {
     enum API {
-        static let baseURL = "http://localhost:8000"
+        static let baseURL = "https://purple.crevn.xyz"
     }
     enum Keychain {
         static let accessToken = "pacepilot.accessToken"

@@ -36,3 +36,8 @@ app.include_router(voice.router,       prefix="/api/voice",       tags=["voice"]
 @app.get("/health")
 async def health():
     return {"status": "ok", "service": "pacepilot-api"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
