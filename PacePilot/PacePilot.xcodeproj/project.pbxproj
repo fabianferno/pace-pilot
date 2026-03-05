@@ -107,6 +107,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F64039B22F5A2585000E4D82 /* PacePilot.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PacePilot.xctestplan; sourceTree = "<group>"; };
 		F69777522F5822AF0035C012 /* PacePilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PacePilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F697775F2F5822B00035C012 /* PacePilotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PacePilotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F69777692F5822B00035C012 /* PacePilotUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PacePilotUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -254,6 +255,7 @@
 		F69777492F5822AF0035C012 = {
 			isa = PBXGroup;
 			children = (
+				F64039B22F5A2585000E4D82 /* PacePilot.xctestplan */,
 				F69777542F5822AF0035C012 /* PacePilot */,
 				F69777622F5822B00035C012 /* PacePilotTests */,
 				F697776C2F5822B00035C012 /* PacePilotUITests */,

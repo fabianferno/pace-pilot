@@ -5,6 +5,18 @@ from voice.tools.definitions import PACEPILOT_TOOLS
 from voice.tools import biometric_tools, plan_tools, history_tools, social_tools
 from voice.tools import calendar_tools, race_tools, user_tools
 
+async def _run_checkins(task, interval_seconds: int) -> None:
+    """Periodically queue a coaching check-in prompt so Gemini stays reactive by default."""
+    CHECKIN_PROMPT = "[COACHING CHECK-IN] Do a brief coaching check-in now."
+    try:
+        while True:
+            await asyncio.sleep(interval_seconds)
+            from pipecat.frames.frames import InputTextRawFrame
+            await task.queue_frame(InputTextRawFrame(text=CHECKIN_PROMPT))
+    except asyncio.CancelledError:
+        pass
+
+
 TOOL_HANDLERS = {
     "get_current_biometrics": biometric_tools.get_current_biometrics,
     "get_run_progress": biometric_tools.get_run_progress,
@@ -98,10 +110,31 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             session_type, INITIAL_GREETING_TRIGGERS["general"]
         )
 
+        # How often the server pushes a proactive check-in prompt (seconds).
+        # 0 means no periodic check-ins for that session type.
+        CHECKIN_INTERVALS = {
+            "active_run": 60,
+            "pre_run": 0,
+            "post_run": 0,
+            "onboarding": 0,
+            "general": 0,
+            "replan": 0,
+        }
+        checkin_interval = CHECKIN_INTERVALS.get(session_type, 0)
+
+        greeting_sent = False
+
         @transport.event_handler("on_first_participant_joined")
         async def on_first_participant_joined(transport, participant):
+            nonlocal greeting_sent
+            if greeting_sent:
+                return
+            greeting_sent = True
             await asyncio.sleep(3)  # wait for GeminiLive + iOS audio track subscription to be ready
             await task.queue_frame(InputTextRawFrame(text=greeting_trigger))
+
+            if checkin_interval > 0:
+                asyncio.create_task(_run_checkins(task, checkin_interval))
 
         await runner.run(task)
 
