@@ -1,0 +1,41 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "pacepilot-server/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            cd ~/projects/pace-pilot/pacepilot-server
+
+            echo "Pulling latest code..."
+            git pull origin main
+
+            echo "Checking if requirements changed..."
+            if git diff HEAD@{1} HEAD --name-only | grep -q requirements.txt; then
+              echo "Installing dependencies..."
+              source venv/bin/activate
+              pip install -r requirements.txt
+            else
+              echo "Dependencies unchanged."
+            fi
+
+            echo "Restarting service..."
+            pm2 restart pacepilot
+
+            echo "Deploy complete."

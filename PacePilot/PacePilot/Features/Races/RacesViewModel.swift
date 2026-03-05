@@ -22,4 +22,32 @@ final class RacesViewModel: ObservableObject {
             races[idx].isInterestedByUser = true
         }
     }
+
+    func createRace(
+        name: String,
+        distanceKm: Double,
+        date: Date,
+        location: String,
+        registrationURL: String?,
+        elevationGainMeters: Double?
+    ) async throws {
+        struct Body: Encodable {
+            let name: String
+            let distanceKm: Double
+            let date: Date
+            let location: String
+            let registrationUrl: String?
+            let elevationGainMeters: Double?
+        }
+        let body = Body(
+            name: name,
+            distanceKm: distanceKm,
+            date: date,
+            location: location,
+            registrationUrl: registrationURL,
+            elevationGainMeters: elevationGainMeters
+        )
+        let created: Race = try await api.post("/api/races", body: body)
+        races.insert(created, at: 0)
+    }
 }
