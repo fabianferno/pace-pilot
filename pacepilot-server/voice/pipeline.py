@@ -24,6 +24,16 @@ TOOL_HANDLERS = {
 }
 
 
+INITIAL_GREETING_TRIGGERS = {
+    "active_run": "The runner has just started their run session. Greet them with an energetic, brief coaching welcome — mention you'll be tracking their pace and heart rate.",
+    "pre_run": "The runner is about to start their run. Give them a short motivating pre-run greeting and ask if they're ready.",
+    "post_run": "The runner just finished their run. Give them a warm congratulatory greeting and tell them you'll review their session.",
+    "onboarding": "A new user has just joined for onboarding. Welcome them warmly and introduce yourself as PacePilot.",
+    "general": "The runner has connected. Give a brief, friendly greeting and ask how you can help.",
+    "replan": "The runner wants to update or create their training plan. Check what you already know about them, then ask what they'd like to change.",
+}
+
+
 async def run_pipeline(session_id: str, user_id: str, session_type: str,
                        room_url: str, bot_token: str) -> None:
     try:
@@ -35,6 +45,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
         from pipecat.services.llm_service import FunctionCallParams
         from pipecat.processors.aggregators.llm_context import LLMContext
         from pipecat.processors.aggregators.llm_response_universal import LLMContextAggregatorPair
+        from pipecat.frames.frames import InputTextRawFrame
 
         settings = get_settings()
         system_prompt = SESSION_TYPE_PROMPTS.get(session_type, SESSION_TYPE_PROMPTS["general"])
@@ -55,7 +66,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             project_id=settings.GCP_PROJECT_ID,
             location=settings.GCP_REGION,
             model="google/gemini-live-2.5-flash-native-audio",
-            voice_id="Charon",
+            voice_id="Aoede",
             system_instruction=system_prompt,
             tools=PACEPILOT_TOOLS,
         )
@@ -82,6 +93,16 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
         ])
         task = PipelineTask(pipeline)
         runner = PipelineRunner()
+
+        greeting_trigger = INITIAL_GREETING_TRIGGERS.get(
+            session_type, INITIAL_GREETING_TRIGGERS["general"]
+        )
+
+        @transport.event_handler("on_first_participant_joined")
+        async def on_first_participant_joined(transport, participant):
+            await asyncio.sleep(1)  # let GeminiLive finish connecting
+            await task.queue_frame(InputTextRawFrame(text=greeting_trigger))
+
         await runner.run(task)
 
     except asyncio.CancelledError:
