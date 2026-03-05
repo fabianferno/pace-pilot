@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 from bson import ObjectId
 from db.connection import get_db
@@ -10,7 +10,7 @@ class RaceRepository:
         self.col = get_db()["races"]
 
     async def discover(self, distance_km: Optional[float] = None, limit: int = 20) -> List[RaceDB]:
-        query: dict = {"date": {"$gte": datetime.utcnow()}}
+        query: dict = {"date": {"$gte": datetime.now(timezone.utc)}}
         if distance_km:
             query["distance_km"] = {"$gte": distance_km - 1, "$lte": distance_km + 1}
         cursor = self.col.find(query).sort("date", 1).limit(limit)

@@ -30,7 +30,7 @@ async def discover_races(
     ]
 
 
-@router.post("")
+@router.post("", status_code=201)
 async def create_race(
     body: CreateRaceRequest,
     user_id: str = Depends(get_current_user_id),
