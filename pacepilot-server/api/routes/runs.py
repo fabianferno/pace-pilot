@@ -26,6 +26,10 @@ class NewRunRequest(BaseModel):
 
 @router.post("")
 async def save_run(body: NewRunRequest, user_id: str = Depends(get_current_user_id)):
+    if body.duration_seconds < 60:
+        raise HTTPException(status_code=400, detail="Run too short: must be at least 60 seconds")
+    if body.distance_km < 0.1:
+        raise HTTPException(status_code=400, detail="Run too short: must be at least 100 metres")
     repo = RunRepository()
     run = RunSessionDB(user_id=user_id, **body.model_dump())
     run_id = await repo.create(run)

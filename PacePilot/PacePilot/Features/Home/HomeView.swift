@@ -8,6 +8,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
+                    greetingCard
                     weeklyStatsCard
                     if let workout = vm.todaysWorkout {
                         todaysWorkoutCard(workout)
@@ -22,11 +23,16 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Image("AppLogo")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(height: 32)
-                        .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    HStack(spacing: 8) {
+                        Image("AppLogo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 36, height: 36)
+                            .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
+                        Text("PacePilot")
+                            .font(.title3.bold())
+                            .foregroundColor(.primary)
+                    }
                 }
             }
             .task { await vm.load() }
@@ -34,6 +40,27 @@ struct HomeView: View {
                 ActiveRunView()
             }
         }
+    }
+
+    var greetingCard: some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 4) {
+                Text(vm.greetingLine)
+                    .font(.title2.bold())
+                Text(vm.motivationLine)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            Spacer()
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 48, height: 48)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .padding()
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(16)
     }
 
     var weeklyStatsCard: some View {
