@@ -6,7 +6,7 @@ struct Race: Codable, Identifiable {
     let distanceKm: Double
     let date: Date
     let location: String
-    let registrationURL: String?
+    let registrationUrl: String?
     let elevationGainMeters: Double?
     var isInterestedByUser: Bool
 }

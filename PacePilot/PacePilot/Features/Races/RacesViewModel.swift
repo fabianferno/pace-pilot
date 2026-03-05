@@ -28,7 +28,7 @@ final class RacesViewModel: ObservableObject {
         distanceKm: Double,
         date: Date,
         location: String,
-        registrationURL: String?,
+        registrationUrl: String?,
         elevationGainMeters: Double?
     ) async throws {
         struct Body: Encodable {
@@ -44,7 +44,7 @@ final class RacesViewModel: ObservableObject {
             distanceKm: distanceKm,
             date: date,
             location: location,
-            registrationUrl: registrationURL,
+            registrationUrl: registrationUrl,
             elevationGainMeters: elevationGainMeters
         )
         let created: Race = try await api.post("/api/races", body: body)
