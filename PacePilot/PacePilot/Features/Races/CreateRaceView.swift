@@ -62,10 +62,12 @@ struct CreateRaceView: View {
     private func submit() async {
         isSubmitting = true
         errorMessage = nil
+        defer { isSubmitting = false }
+        guard let distanceKm = Double(distanceKmText) else { return }
         do {
             try await vm.createRace(
                 name: name.trimmingCharacters(in: .whitespaces),
-                distanceKm: Double(distanceKmText) ?? 0,
+                distanceKm: distanceKm,
                 date: date,
                 location: location.trimmingCharacters(in: .whitespaces),
                 registrationUrl: registrationURL.isEmpty ? nil : registrationURL,
@@ -75,6 +77,5 @@ struct CreateRaceView: View {
         } catch {
             errorMessage = error.localizedDescription
         }
-        isSubmitting = false
     }
 }
