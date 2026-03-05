@@ -15,3 +15,6 @@ class RaceService:
 
     async def register_interest(self, race_id: str, user_id: str) -> None:
         await self.repo.mark_interest(race_id, user_id)
+
+    async def create(self, payload: dict) -> RaceDB:
+        return await self.repo.create(payload)
