@@ -17,6 +17,7 @@
 		F69777E52F5845620035C012 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777E42F5845620035C012 /* HealthKit.framework */; };
 		F69777E72F5845670035C012 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777E62F5845670035C012 /* WatchConnectivity.framework */; };
 		F69777E92F5845700035C012 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F69777E82F5845700035C012 /* CoreLocation.framework */; };
+		F6977CDA2F58D4470035C012 /* Daily in Frameworks */ = {isa = PBXBuildFile; productRef = F6977CD92F58D4470035C012 /* Daily */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,20 +69,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = F69777512F5822AF0035C012;
 			remoteInfo = PacePilot;
-		};
-		F69777C32F5828610035C012 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F697774A2F5822AF0035C012 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F69777AF2F5828610035C012;
-			remoteInfo = Shared;
-		};
-		F69777D12F58330D0035C012 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F697774A2F5822AF0035C012 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F69777AF2F5828610035C012;
-			remoteInfo = Shared;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -199,6 +186,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F6977CDA2F58D4470035C012 /* Daily in Frameworks */,
 				F69777E32F5845530035C012 /* AVFoundation.framework in Frameworks */,
 				F69777E12F5845480035C012 /* WatchConnectivity.framework in Frameworks */,
 				F69777DF2F58453D0035C012 /* EventKit.framework in Frameworks */,
@@ -343,6 +331,7 @@
 			);
 			name = PacePilot;
 			packageProductDependencies = (
+				F6977CD92F58D4470035C012 /* Daily */,
 			);
 			productName = PacePilot;
 			productReference = F69777522F5822AF0035C012 /* PacePilot.app */;
@@ -561,6 +550,9 @@
 			);
 			mainGroup = F69777492F5822AF0035C012;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F6977CD82F58D4470035C012 /* XCRemoteSwiftPackageReference "daily-client-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F69777532F5822AF0035C012 /* Products */;
 			projectDirPath = "";
@@ -731,16 +723,6 @@
 			isa = PBXTargetDependency;
 			target = F69777512F5822AF0035C012 /* PacePilot */;
 			targetProxy = F69777BE2F5828610035C012 /* PBXContainerItemProxy */;
-		};
-		F69777C42F5828610035C012 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F69777AF2F5828610035C012 /* Shared */;
-			targetProxy = F69777C32F5828610035C012 /* PBXContainerItemProxy */;
-		};
-		F69777D22F58330D0035C012 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F69777AF2F5828610035C012 /* Shared */;
-			targetProxy = F69777D12F58330D0035C012 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1379,6 +1361,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F6977CD82F58D4470035C012 /* XCRemoteSwiftPackageReference "daily-client-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daily-co/daily-client-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.37.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F6977CD92F58D4470035C012 /* Daily */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F6977CD82F58D4470035C012 /* XCRemoteSwiftPackageReference "daily-client-ios" */;
+			productName = Daily;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F697774A2F5822AF0035C012 /* Project object */;
 }
