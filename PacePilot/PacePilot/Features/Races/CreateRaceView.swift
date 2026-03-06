@@ -19,7 +19,8 @@ struct CreateRunView: View {
     private var isValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty &&
         Double(distanceKmText) != nil &&
-        latitude != nil
+        latitude != nil &&
+        longitude != nil
     }
 
     var body: some View {
