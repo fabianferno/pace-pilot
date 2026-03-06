@@ -1,51 +1,64 @@
 import SwiftUI
+import MapKit
 
-struct CreateRaceView: View {
-    @ObservedObject var vm: RacesViewModel
+struct CreateRunView: View {
+    @ObservedObject var vm: RunsViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
     @State private var distanceKmText = ""
     @State private var date = Date()
-    @State private var location = ""
-    @State private var registrationURL = ""
-    @State private var elevationText = ""
+    @State private var locationDisplay = ""
+    @State private var city = ""
+    @State private var latitude: Double?
+    @State private var longitude: Double?
+    @State private var showLocationPicker = false
     @State private var isSubmitting = false
     @State private var errorMessage: String?
 
     private var isValid: Bool {
         !name.trimmingCharacters(in: .whitespaces).isEmpty &&
-        !location.trimmingCharacters(in: .whitespaces).isEmpty &&
-        Double(distanceKmText) != nil
+        Double(distanceKmText) != nil &&
+        latitude != nil
     }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Race Details") {
+                Section("Run Details") {
                     TextField("Name", text: $name)
                     TextField("Distance (km)", text: $distanceKmText)
                         .keyboardType(.decimalPad)
                     DatePicker("Date", selection: $date, in: Date()..., displayedComponents: .date)
-                    TextField("Location", text: $location)
                 }
-                Section("Optional") {
-                    TextField("Registration URL", text: $registrationURL)
-                        .keyboardType(.URL)
-                        .autocorrectionDisabled()
-                        .textInputAutocapitalization(.never)
-                    TextField("Elevation Gain (m)", text: $elevationText)
-                        .keyboardType(.decimalPad)
+                Section("Location") {
+                    Button(action: { showLocationPicker = true }) {
+                        HStack {
+                            Label(
+                                locationDisplay.isEmpty ? "Pick on Map" : locationDisplay,
+                                systemImage: "mappin.and.ellipse"
+                            )
+                            .foregroundColor(locationDisplay.isEmpty ? .accentColor : .primary)
+                            Spacer()
+                            if !locationDisplay.isEmpty {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.secondary)
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    if !city.isEmpty {
+                        LabeledContent("City", value: city)
+                            .foregroundColor(.secondary)
+                    }
                 }
                 if let errorMessage {
                     Section {
-                        Text(errorMessage)
-                            .foregroundColor(.red)
-                            .font(.caption)
+                        Text(errorMessage).foregroundColor(.red).font(.caption)
                     }
                 }
             }
-            .navigationTitle("New Race")
+            .navigationTitle("New Run")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -56,6 +69,14 @@ struct CreateRaceView: View {
                         .disabled(!isValid || isSubmitting)
                 }
             }
+            .sheet(isPresented: $showLocationPicker) {
+                LocationPickerView { coord, display, resolvedCity in
+                    latitude = coord.latitude
+                    longitude = coord.longitude
+                    locationDisplay = display
+                    city = resolvedCity
+                }
+            }
         }
     }
 
@@ -63,15 +84,17 @@ struct CreateRaceView: View {
         isSubmitting = true
         errorMessage = nil
         defer { isSubmitting = false }
-        guard let distanceKm = Double(distanceKmText) else { return }
+        guard let distanceKm = Double(distanceKmText),
+              let lat = latitude, let lng = longitude else { return }
         do {
-            try await vm.createRace(
+            try await vm.createRun(
                 name: name.trimmingCharacters(in: .whitespaces),
                 distanceKm: distanceKm,
                 date: date,
-                location: location.trimmingCharacters(in: .whitespaces),
-                registrationUrl: registrationURL.isEmpty ? nil : registrationURL,
-                elevationGainMeters: elevationText.isEmpty ? nil : Double(elevationText)
+                location: locationDisplay,
+                city: city,
+                latitude: lat,
+                longitude: lng
             )
             dismiss()
         } catch {
