@@ -15,6 +15,7 @@ class UserUpdateRequest(BaseModel):
     max_hr: Optional[int] = None
     preferred_days: Optional[List[int]] = None
     onboarding_complete: Optional[bool] = None
+    city: Optional[str] = None
 
 
 @router.get("/me")
