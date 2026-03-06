@@ -1,12 +1,14 @@
 import Foundation
 
-struct Race: Codable, Identifiable {
+struct CommunityRun: Codable, Identifiable {
     let id: String
     let name: String
     let distanceKm: Double
     let date: Date
     let location: String
-    let registrationUrl: String?
-    let elevationGainMeters: Double?
-    var isInterestedByUser: Bool
+    let city: String
+    let latitude: Double
+    let longitude: Double
+    var rsvpCount: Int
+    var isRsvpdByUser: Bool
 }
