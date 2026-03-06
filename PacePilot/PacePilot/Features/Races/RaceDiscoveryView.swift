@@ -1,8 +1,15 @@
 import SwiftUI
 
-struct RaceDiscoveryView: View {
-    @StateObject private var vm = RacesViewModel()
+struct RunDiscoveryView: View {
+    @StateObject private var vm = RunsViewModel()
     @State private var showCreate = false
+    @State private var filterByCity = false
+    @State private var userCity: String = ""
+
+    private var displayedRuns: [CommunityRun] {
+        guard filterByCity, !userCity.isEmpty else { return vm.runs }
+        return vm.runs.filter { $0.city.lowercased() == userCity.lowercased() }
+    }
 
     var body: some View {
         NavigationStack {
@@ -10,36 +17,28 @@ struct RaceDiscoveryView: View {
                 if vm.isLoading {
                     ProgressView()
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if vm.races.isEmpty {
+                } else if displayedRuns.isEmpty {
                     emptyStateView
                 } else {
-                    List(vm.races) { race in
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text(race.name).font(.headline)
-                                Spacer()
-                                if race.isInterestedByUser {
-                                    Image(systemName: "star.fill").foregroundColor(.accentColor)
-                                }
-                            }
-                            HStack(spacing: 12) {
-                                Label(String(format: "%.0f km", race.distanceKm), systemImage: "ruler")
-                                Label(race.location, systemImage: "mappin")
-                                Label(race.date.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
-                            }
-                            .font(.caption).foregroundColor(.secondary)
-                        }
-                        .swipeActions {
-                            if !race.isInterestedByUser {
-                                Button("Interested") { Task { await vm.markInterest(race.id) } }
-                                    .tint(.accentColor)
-                            }
+                    List(displayedRuns) { run in
+                        NavigationLink(destination: RunDetailView(run: run, vm: vm)) {
+                            RunRow(run: run)
                         }
                     }
                 }
             }
-            .navigationTitle("Races")
+            .navigationTitle("Runs")
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if !userCity.isEmpty {
+                        Toggle(isOn: $filterByCity) {
+                            Label("My City", systemImage: "location.fill")
+                                .font(.caption)
+                        }
+                        .toggleStyle(.button)
+                        .tint(.accentColor)
+                    }
+                }
                 ToolbarItem(placement: .primaryAction) {
                     Button { showCreate = true } label: {
                         Image(systemName: "plus")
@@ -47,22 +46,27 @@ struct RaceDiscoveryView: View {
                 }
             }
             .sheet(isPresented: $showCreate) {
-                CreateRaceView(vm: vm)
+                CreateRunView(vm: vm)
             }
-            .task { await vm.load() }
+            .task {
+                userCity = AuthManager.shared.currentUser?.city ?? ""
+                await vm.load()
+            }
         }
     }
 
     var emptyStateView: some View {
         VStack(spacing: 20) {
             Spacer()
-            Image(systemName: "flag.checkered")
+            Image(systemName: "figure.run.circle")
                 .font(.system(size: 60))
                 .foregroundColor(.accentColor.opacity(0.8))
             VStack(spacing: 8) {
-                Text("No Races Yet")
+                Text(filterByCity ? "No Runs in \(userCity)" : "No Runs Yet")
                     .font(.title2.bold())
-                Text("Upcoming races will appear here once they're added. Check back soon to discover events near you.")
+                Text(filterByCity
+                     ? "No upcoming runs in your city. Try showing all runs."
+                     : "Be the first to host a community run!")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -71,5 +75,35 @@ struct RaceDiscoveryView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+private struct RunRow: View {
+    let run: CommunityRun
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Text(run.name).font(.headline)
+                Spacer()
+                if run.isRsvpdByUser {
+                    Label("Going", systemImage: "checkmark.circle.fill")
+                        .font(.caption.bold())
+                        .foregroundColor(.accentColor)
+                }
+            }
+            HStack(spacing: 12) {
+                Label(String(format: "%.0f km", run.distanceKm), systemImage: "ruler")
+                Label(run.city, systemImage: "mappin")
+                Label(run.date.formatted(date: .abbreviated, time: .omitted), systemImage: "calendar")
+            }
+            .font(.caption).foregroundColor(.secondary)
+            if run.rsvpCount > 0 {
+                Text("\(run.rsvpCount) going")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
+        }
+        .padding(.vertical, 4)
     }
 }

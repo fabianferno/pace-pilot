@@ -81,8 +81,8 @@ struct MainTabView: View {
                 .tabItem { Label("Plan", systemImage: "calendar") }
             CommunityView()
                 .tabItem { Label("Community", systemImage: "person.3.fill") }
-            RaceDiscoveryView()
-                .tabItem { Label("Races", systemImage: "flag.checkered") }
+            RunDiscoveryView()
+                .tabItem { Label("Runs", systemImage: "figure.run") }
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person.fill") }
         }
