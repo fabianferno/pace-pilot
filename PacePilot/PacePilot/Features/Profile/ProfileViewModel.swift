@@ -10,6 +10,7 @@ struct ProfileUpdateRequest: Encodable {
     let restingHr: Int?
     let maxHr: Int?
     let preferredDays: [Int]?
+    let city: String?
 }
 
 @MainActor

@@ -14,6 +14,7 @@ struct User: Codable, Identifiable, Equatable {
     var restingHr: Int?
     var maxHr: Int?
     var preferredDays: [Int]
+    var city: String?
 
     enum CommunityTier: String, Codable {
         case discovery, foundation, momentum, velocity, elite
