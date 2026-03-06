@@ -1,53 +1,61 @@
 import Foundation
-import Combine
 
 @MainActor
-final class RacesViewModel: ObservableObject {
-    @Published var races: [Race] = []
+final class RunsViewModel: ObservableObject {
+    @Published var runs: [CommunityRun] = []
     @Published var isLoading = false
     private let api: APIClient
+
     init(api: APIClient = .shared) { self.api = api }
 
     func load() async {
         isLoading = true
-        races = (try? await api.get("/api/races/discover")) ?? []
+        runs = (try? await api.get("/api/community-runs/discover")) ?? []
         isLoading = false
     }
 
-    func markInterest(_ raceId: String) async {
+    func rsvp(_ runId: String) async {
         struct Empty: Decodable {}
         struct EmptyBody: Encodable {}
-        _ = try? await api.post("/api/races/\(raceId)/register-interest", body: EmptyBody()) as Empty
-        if let idx = races.firstIndex(where: { $0.id == raceId }) {
-            races[idx].isInterestedByUser = true
+        _ = try? await api.post("/api/community-runs/\(runId)/rsvp", body: EmptyBody()) as Empty
+        if let idx = runs.firstIndex(where: { $0.id == runId }) {
+            runs[idx].isRsvpdByUser = true
+            runs[idx].rsvpCount += 1
         }
     }
 
-    func createRace(
+    func unrsvp(_ runId: String) async {
+        try? await api.delete("/api/community-runs/\(runId)/rsvp")
+        if let idx = runs.firstIndex(where: { $0.id == runId }) {
+            runs[idx].isRsvpdByUser = false
+            runs[idx].rsvpCount = max(0, runs[idx].rsvpCount - 1)
+        }
+    }
+
+    func createRun(
         name: String,
         distanceKm: Double,
         date: Date,
         location: String,
-        registrationUrl: String?,
-        elevationGainMeters: Double?
+        city: String,
+        latitude: Double,
+        longitude: Double
     ) async throws {
         struct Body: Encodable {
             let name: String
             let distanceKm: Double
             let date: Date
             let location: String
-            let registrationUrl: String?
-            let elevationGainMeters: Double?
+            let city: String
+            let latitude: Double
+            let longitude: Double
         }
         let body = Body(
-            name: name,
-            distanceKm: distanceKm,
-            date: date,
-            location: location,
-            registrationUrl: registrationUrl,
-            elevationGainMeters: elevationGainMeters
+            name: name, distanceKm: distanceKm, date: date,
+            location: location, city: city,
+            latitude: latitude, longitude: longitude
         )
-        let created: Race = try await api.post("/api/races", body: body)
-        races.insert(created, at: 0)
+        let created: CommunityRun = try await api.post("/api/community-runs", body: body)
+        runs.insert(created, at: 0)
     }
 }
