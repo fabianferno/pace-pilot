@@ -30,7 +30,7 @@ TOOL_HANDLERS = {
     "get_friend_activity": social_tools.get_friend_activity,
     "get_leaderboard_position": social_tools.get_leaderboard_position,
     "schedule_run_to_calendar": calendar_tools.schedule_run_to_calendar,
-    "find_local_races": race_tools.find_local_races,
+    "find_local_runs": race_tools.find_local_runs,
     "update_user_profile": user_tools.update_user_profile,
     "mark_not_feeling_well": user_tools.mark_not_feeling_well,
 }

@@ -11,7 +11,7 @@ PACEPILOT_TOOLS = ToolsSchema(standard_tools=[
     FunctionSchema(name="get_plan_status", description="Returns current plan phase, week, completion %.", properties={}, required=[]),
     FunctionSchema(name="get_friend_activity", description="Returns recent runs from community members.", properties={}, required=[]),
     FunctionSchema(name="get_leaderboard_position", description="Returns user's rank on weekly leaderboard.", properties={}, required=[]),
-    FunctionSchema(name="find_local_races", description="Finds upcoming races filtered by distance.", properties={"distance_km": {"type": "number"}}, required=[]),
+    FunctionSchema(name="find_local_runs", description="Finds upcoming community runs nearby.", properties={}, required=[]),
     FunctionSchema(name="schedule_run_to_calendar", description="Adds a workout to Google Calendar.", properties={"workout_id": {"type": "string"}}, required=["workout_id"]),
     FunctionSchema(name="reschedule_workout", description="Moves a workout to a different date.", properties={"workout_id": {"type": "string"}, "new_date": {"type": "string"}}, required=["workout_id", "new_date"]),
     FunctionSchema(name="update_user_profile", description="Updates user profile during onboarding.", properties={"display_name": {"type": "string"}, "weekly_mileage_goal": {"type": "number"}, "target_race_distance": {"type": "string"}, "resting_hr": {"type": "integer"}, "max_hr": {"type": "integer"}, "preferred_days": {"type": "array", "items": {"type": "integer"}}, "onboarding_complete": {"type": "boolean"}}, required=[]),
