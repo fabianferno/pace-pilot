@@ -36,6 +36,7 @@ class UserDB(BaseModel):
     resting_hr: Optional[int] = None
     max_hr: Optional[int] = None
     preferred_days: List[int] = []
+    city: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
@@ -116,6 +117,7 @@ class RunSessionDB(BaseModel):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     user_id: str
     workout_id: Optional[str] = None
+    workout_type: Optional[str] = None  # e.g. "easy", "tempo", "interval", "long"
     started_at: datetime
     ended_at: datetime
     distance_km: float
@@ -159,15 +161,16 @@ class CommunityDB(BaseModel):
         arbitrary_types_allowed = True
 
 
-class RaceDB(BaseModel):
+class CommunityRunDB(BaseModel):
     id: Optional[PyObjectId] = Field(default=None, alias="_id")
     name: str
     distance_km: float
     date: datetime
     location: str
-    registration_url: Optional[str] = None
-    elevation_gain_meters: Optional[float] = None
-    interested_user_ids: List[str] = []
+    city: str
+    latitude: float
+    longitude: float
+    rsvp_user_ids: List[str] = []
 
     class Config:
         populate_by_name = True
