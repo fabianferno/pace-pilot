@@ -1,5 +1,17 @@
 import SwiftUI
 
+private extension Int {
+    var zoneColor: Color {
+        switch self {
+        case 1: return .blue
+        case 2: return .green
+        case 3: return .yellow
+        case 4: return .orange
+        default: return .red
+        }
+    }
+}
+
 struct ActiveRunView: View {
     @StateObject private var vm = ActiveRunViewModel()
     @State private var runResult: NewRunRequest?
@@ -67,6 +79,15 @@ struct ActiveRunView: View {
                     metricBlock(value: RunTimeFormatter.format(seconds: vm.elapsedSeconds), label: "TIME")
                 }
                 metricBlock(value: vm.heartRate > 0 ? "\(Int(vm.heartRate))" : "--", label: "BPM")
+                if let zone = vm.currentHRZone {
+                    Text("ZONE \(zone.number) · \(zone.name.uppercased())")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(zone.number.zoneColor)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 5)
+                        .background(zone.number.zoneColor.opacity(0.2))
+                        .clipShape(Capsule())
+                }
             }
 
             Spacer()

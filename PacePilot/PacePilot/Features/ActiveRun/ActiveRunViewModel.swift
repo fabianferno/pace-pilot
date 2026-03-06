@@ -11,6 +11,17 @@ final class ActiveRunViewModel: ObservableObject {
     @Published var botAudioReady = false
     @Published var isRunning = false
     @Published var error: String?
+    @Published var hrZones: TrainingPlan.HRZones?
+
+    var currentHRZone: (number: Int, name: String)? {
+        guard heartRate > 0, let zones = hrZones else { return nil }
+        let hr = Int(heartRate)
+        if hr <= zones.zone1Max { return (1, "Recovery") }
+        if hr <= zones.zone2Max { return (2, "Aerobic") }
+        if hr <= zones.zone3Max { return (3, "Tempo") }
+        if hr <= zones.zone4Max { return (4, "Threshold") }
+        return (5, "VO2 Max")
+    }
 
     private let voice = VoiceSessionService.shared
     private let health = HealthKitService.shared
@@ -41,6 +52,9 @@ final class ActiveRunViewModel: ObservableObject {
 
     func startRun() async {
         do {
+            if let plan: TrainingPlan = try? await APIClient.shared.get("/api/plans/active") {
+                hrZones = plan.hrZones
+            }
             try await health.requestAuthorization()
             location.requestAuthorization()
             try await workout.startWorkout()

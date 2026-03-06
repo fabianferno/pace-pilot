@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
 from api.middleware.auth import get_current_user_id
@@ -44,7 +44,9 @@ async def create_run(body: CreateRunRequest, user_id: str = Depends(get_current_
 async def get_run(run_id: str, user_id: str = Depends(get_current_user_id)):
     svc = CommunityRunService()
     run = await svc.get(run_id)
-    return _serialize(run, user_id) if run else {}
+    if not run:
+        raise HTTPException(status_code=404, detail="Run not found")
+    return _serialize(run, user_id)
 
 
 @router.post("/{run_id}/rsvp", status_code=200)

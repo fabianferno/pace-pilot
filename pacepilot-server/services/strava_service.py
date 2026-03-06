@@ -1,4 +1,6 @@
 import httpx
+from datetime import datetime, timedelta
+from typing import Optional
 from config.settings import get_settings
 
 STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token"
@@ -28,6 +30,25 @@ class StravaService:
             })
             resp.raise_for_status()
             return resp.json()
+
+    async def get_avg_run_pace_seconds_per_km(self, access_token: str, weeks: int = 8) -> Optional[float]:
+        since = int((datetime.utcnow() - timedelta(weeks=weeks)).timestamp())
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
+                f"{STRAVA_API_BASE}/athlete/activities",
+                headers={"Authorization": f"Bearer {access_token}"},
+                params={"after": since, "per_page": 100},
+            )
+            resp.raise_for_status()
+            activities = resp.json()
+        paces = [
+            act["moving_time"] / (act["distance"] / 1000)
+            for act in activities
+            if act.get("type") == "Run"
+            and act.get("distance", 0) > 0
+            and act.get("moving_time", 0) > 0
+        ]
+        return sum(paces) / len(paces) if paces else None
 
     async def post_activity(self, access_token: str, run: dict) -> dict:
         async with httpx.AsyncClient() as client:

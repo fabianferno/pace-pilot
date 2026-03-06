@@ -3,6 +3,7 @@ from fastapi.responses import RedirectResponse
 from api.middleware.auth import get_current_user_id
 from db.repositories.user_repo import UserRepository
 from services.strava_service import StravaService
+from services.community_service import CommunityService
 
 router = APIRouter()
 
@@ -24,6 +25,8 @@ async def strava_callback(code: str = Query(...), state: str = Query(...)):
         "strava_refresh_token": token_data["refresh_token"],
         "strava_token_expires_at": token_data["expires_at"],
     })
+    tier = await CommunityService().compute_tier(state)
+    await repo.update(state, {"community_tier": tier})
     return RedirectResponse(url="pacepilot://strava-connected")
 
 

@@ -11,6 +11,7 @@ router = APIRouter()
 
 class NewRunRequest(BaseModel):
     workout_id: Optional[str] = None
+    workout_type: Optional[str] = None
     started_at: datetime
     ended_at: datetime
     distance_km: float
