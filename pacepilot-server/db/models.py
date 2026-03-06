@@ -171,6 +171,7 @@ class CommunityRunDB(BaseModel):
     latitude: float
     longitude: float
     rsvp_user_ids: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
         populate_by_name = True
