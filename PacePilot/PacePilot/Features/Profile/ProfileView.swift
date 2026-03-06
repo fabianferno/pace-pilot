@@ -109,6 +109,7 @@ struct ProfileView: View {
     @State private var restingHrStr = ""
     @State private var maxHrStr = ""
     @State private var preferredDays: Set<Int> = []
+    @State private var city = ""
 
     private let dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
@@ -170,6 +171,13 @@ struct ProfileView: View {
                 Text("Name")
                 Spacer()
                 TextField("Your name", text: $displayName)
+                    .multilineTextAlignment(.trailing)
+                    .foregroundColor(.secondary)
+            }
+            HStack {
+                Text("City")
+                Spacer()
+                TextField("Your city", text: $city)
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
             }
@@ -301,6 +309,7 @@ struct ProfileView: View {
         restingHrStr = user.restingHr.map { String($0) } ?? ""
         maxHrStr = user.maxHr.map { String($0) } ?? ""
         preferredDays = Set(user.preferredDays)
+        city = user.city ?? ""
     }
 
     private func saveChanges() async {
@@ -312,7 +321,8 @@ struct ProfileView: View {
             targetRaceDate: hasRaceDate ? targetRaceDate : nil,
             restingHr: Int(restingHrStr),
             maxHr: Int(maxHrStr),
-            preferredDays: Array(preferredDays).sorted()
+            preferredDays: Array(preferredDays).sorted(),
+            city: city.isEmpty ? nil : city
         )
         await vm.save(request)
     }
