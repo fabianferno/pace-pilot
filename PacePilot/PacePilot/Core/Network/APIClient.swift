@@ -71,6 +71,10 @@ final class APIClient: ObservableObject {
         let _: EmptyResponse = try await request(method: "DELETE", path: path, body: nil as String?)
     }
 
+    func delete<T: Decodable>(_ path: String) async throws -> T {
+        try await request(method: "DELETE", path: path, body: nil as String?)
+    }
+
     private func request<Body: Encodable, T: Decodable>(
         method: String, path: String, body: Body?
     ) async throws -> T {
