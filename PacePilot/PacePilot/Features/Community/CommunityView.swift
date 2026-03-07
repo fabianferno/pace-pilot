@@ -6,6 +6,12 @@ struct CommunityView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    communityHeaderCard
+                        .listRowInsets(EdgeInsets())
+                        .listRowBackground(Color.clear)
+                }
+
                 howItWorksSection
 
                 if let community = vm.community {
@@ -73,6 +79,36 @@ struct CommunityView: View {
             .navigationTitle("Community")
             .task { await vm.load() }
         }
+    }
+
+    var communityHeaderCard: some View {
+        ZStack(alignment: .bottomTrailing) {
+            LinearGradient(
+                colors: [Color.accentColor.opacity(0.85), Color.accentColor.opacity(0.35)],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+
+            Image("RunnerFemale")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 145)
+                .padding(.bottom, -4)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Run Together")
+                    .font(.title2.bold())
+                    .foregroundColor(.white)
+                Text("Your community, your pace.")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.85))
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(height: 160)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     var howItWorksSection: some View {
