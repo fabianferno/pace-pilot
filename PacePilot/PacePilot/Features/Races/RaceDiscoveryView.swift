@@ -13,16 +13,29 @@ struct RunDiscoveryView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if vm.isLoading {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else if displayedRuns.isEmpty {
-                    emptyStateView
-                } else {
-                    List(displayedRuns) { run in
-                        NavigationLink(destination: RunDetailView(run: run, vm: vm)) {
-                            RunRow(run: run)
+            ScrollView {
+                VStack(spacing: 0) {
+                    runsHeaderCard
+                        .padding(.horizontal)
+                        .padding(.top)
+
+                    if vm.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 200)
+                    } else if displayedRuns.isEmpty {
+                        emptyStateView
+                    } else {
+                        LazyVStack(spacing: 0) {
+                            ForEach(displayedRuns) { run in
+                                NavigationLink(destination: RunDetailView(run: run, vm: vm)) {
+                                    RunRow(run: run)
+                                        .padding(.horizontal)
+                                        .padding(.vertical, 8)
+                                }
+                                .buttonStyle(.plain)
+                                Divider()
+                                    .padding(.horizontal)
+                            }
                         }
                     }
                 }
@@ -53,6 +66,40 @@ struct RunDiscoveryView: View {
                 await vm.load()
             }
         }
+    }
+
+    var runsHeaderCard: some View {
+        ZStack(alignment: .bottomTrailing) {
+            LinearGradient(
+                colors: [
+                    Color(red: 0.08, green: 0.08, blue: 0.12),
+                    Color(red: 0.18, green: 0.18, blue: 0.28)
+                ],
+                startPoint: .leading,
+                endPoint: .trailing
+            )
+
+            Image("RunnerMale")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 150)
+                .padding(.bottom, -4)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Discover Runs")
+                    .font(.title2.bold())
+                    .foregroundColor(.white)
+                Text("Find your next group run.")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.85))
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .frame(height: 160)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     var emptyStateView: some View {
