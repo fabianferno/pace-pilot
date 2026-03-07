@@ -43,24 +43,29 @@ struct HomeView: View {
     }
 
     var greetingCard: some View {
-        HStack {
+        ZStack(alignment: .bottomLeading) {
+            GIFImageView(name: "artistic-runner")
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
+
+            LinearGradient(
+                colors: [.black.opacity(0.6), .black.opacity(0.1), .clear],
+                startPoint: .bottom,
+                endPoint: .top
+            )
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(vm.greetingLine)
                     .font(.title2.bold())
+                    .foregroundColor(.white)
                 Text(vm.motivationLine)
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.white.opacity(0.85))
             }
-            Spacer()
-            Image("AppLogo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 48, height: 48)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+            .padding()
         }
-        .padding()
-        .background(Color(.secondarySystemGroupedBackground))
-        .cornerRadius(16)
+        .frame(height: 180)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
     var weeklyStatsCard: some View {
