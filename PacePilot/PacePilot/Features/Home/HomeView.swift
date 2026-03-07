@@ -47,6 +47,7 @@ struct HomeView: View {
             GIFImageView(name: "artistic-runner")
                 .frame(maxWidth: .infinity)
                 .frame(height: 180)
+                .accessibilityHidden(true)
 
             LinearGradient(
                 colors: [.black.opacity(0.6), .black.opacity(0.1), .clear],

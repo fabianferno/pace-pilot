@@ -94,6 +94,7 @@ struct CommunityView: View {
                 .scaledToFit()
                 .frame(height: 145)
                 .padding(.bottom, -4)
+                .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text("Run Together")
