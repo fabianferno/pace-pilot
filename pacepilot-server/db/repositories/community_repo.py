@@ -13,6 +13,9 @@ class CommunityRepository:
         doc = await self.col.find_one({"tier": tier})
         return CommunityDB(**doc) if doc else None
 
+    async def count_members_by_tier(self, tier: str) -> int:
+        return await get_db()["users"].count_documents({"community_tier": tier})
+
     async def get_leaderboard(self, community_id: str, limit: int = 20) -> List[dict]:
         since = datetime.utcnow() - timedelta(days=7)
         pipeline = [
@@ -22,15 +25,29 @@ class CommunityRepository:
             {"$limit": limit},
         ]
         runs_col = get_db()["run_sessions"]
-        results = []
-        rank = 1
+        raw = []
         async for doc in runs_col.aggregate(pipeline):
+            raw.append(doc)
+
+        # Fetch display names for all users in one query
+        user_ids = [r["_id"] for r in raw]
+        users_col = get_db()["users"]
+        user_docs = users_col.find(
+            {"_id": {"$in": [ObjectId(uid) for uid in user_ids if ObjectId.is_valid(uid)]}},
+            {"_id": 1, "display_name": 1},
+        )
+        name_map = {str(u["_id"]): u.get("display_name", "Runner") async for u in user_docs}
+
+        results = []
+        for rank, doc in enumerate(raw, start=1):
+            uid = doc["_id"]
             results.append({
-                "user_id": doc["_id"],
+                "id": uid,
+                "user_id": uid,
+                "display_name": name_map.get(uid, "Runner"),
                 "weekly_distance_km": doc["weekly_distance_km"],
                 "rank": rank,
             })
-            rank += 1
         return results
 
     async def get_friend_activity(self, user_id: str, limit: int = 10) -> List[dict]:

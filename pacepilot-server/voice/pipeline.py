@@ -1,18 +1,52 @@
 import asyncio
 from config.settings import get_settings
 from voice.system_prompts.general import SESSION_TYPE_PROMPTS
-from voice.tools.definitions import PACEPILOT_TOOLS
+from voice.tools.definitions import PACEPILOT_TOOLS, ACTIVE_RUN_TOOLS
 from voice.tools import biometric_tools, plan_tools, history_tools, social_tools
 from voice.tools import calendar_tools, race_tools, user_tools
 
-async def _run_checkins(task, interval_seconds: int) -> None:
-    """Periodically queue a coaching check-in prompt so Gemini stays reactive by default."""
-    CHECKIN_PROMPT = "[COACHING CHECK-IN] Do a brief coaching check-in now."
+async def _run_checkins(task, session_id: str, interval_seconds: int) -> None:
+    """Server-side check: only queue a coaching prompt when something is actually notable.
+    Biometrics are evaluated here so no token-wasting tool call is needed on the agent side."""
+    from pipecat.frames.frames import InputTextRawFrame
+    from voice.context.biometric_store import BiometricStore
+    from utils.formatters import format_pace
+
+    last_km_milestone = 0.0
+    # Rough HR alert threshold; refined once user profile is loaded (180 bpm ~= 90% for typical runner)
+    HR_ALERT_BPM = 180
+    # Pace deviation threshold: fraction beyond which we alert (0.20 = 20%)
+    PACE_DEVIATION = 0.20
+
     try:
         while True:
             await asyncio.sleep(interval_seconds)
-            from pipecat.frames.frames import InputTextRawFrame
-            await task.queue_frame(InputTextRawFrame(text=CHECKIN_PROMPT))
+            snap = await BiometricStore.get(session_id)
+
+            alerts: list[str] = []
+
+            # HR alert
+            if snap.heart_rate >= HR_ALERT_BPM:
+                alerts.append(f"heart rate is {int(snap.heart_rate)} bpm (very high — runner should ease back)")
+
+            # km milestone (1, 5, 10, 15, 20, halfway is handled separately if needed)
+            MILESTONES = [1, 2, 3, 4, 5, 10, 15, 20, 21.1, 42.2]
+            for m in MILESTONES:
+                if last_km_milestone < m <= snap.distance_km:
+                    alerts.append(f"runner just crossed {m} km ({format_pace(snap.pace_seconds_per_km) if snap.pace_seconds_per_km else '--:--'} /km current pace)")
+                    last_km_milestone = m
+                    break
+
+            if not alerts:
+                # Nothing notable — skip entirely, no tokens spent
+                continue
+
+            alert_text = "; ".join(alerts)
+            prompt = (
+                f"[COACHING ALERT] Current data (do NOT call tools): {alert_text}. "
+                "Give one brief coaching cue in one sentence."
+            )
+            await task.queue_frame(InputTextRawFrame(text=prompt))
     except asyncio.CancelledError:
         pass
 
@@ -61,6 +95,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
 
         settings = get_settings()
         system_prompt = SESSION_TYPE_PROMPTS.get(session_type, SESSION_TYPE_PROMPTS["general"])
+        tools = ACTIVE_RUN_TOOLS if session_type == "active_run" else PACEPILOT_TOOLS
 
         transport = DailyTransport(
             room_url, bot_token, "PacePilot Coach",
@@ -80,7 +115,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             model="google/gemini-live-2.5-flash-native-audio",
             voice_id="Aoede",
             system_instruction=system_prompt,
-            tools=PACEPILOT_TOOLS,
+            tools=tools,
         )
 
         async def handle_tool_call(params: FunctionCallParams):
@@ -113,7 +148,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
         # How often the server pushes a proactive check-in prompt (seconds).
         # 0 means no periodic check-ins for that session type.
         CHECKIN_INTERVALS = {
-            "active_run": 60,
+            "active_run": 120,
             "pre_run": 0,
             "post_run": 0,
             "onboarding": 0,
@@ -134,7 +169,7 @@ async def run_pipeline(session_id: str, user_id: str, session_type: str,
             await task.queue_frame(InputTextRawFrame(text=greeting_trigger))
 
             if checkin_interval > 0:
-                asyncio.create_task(_run_checkins(task, checkin_interval))
+                asyncio.create_task(_run_checkins(task, session_id, checkin_interval))
 
         await runner.run(task)
 

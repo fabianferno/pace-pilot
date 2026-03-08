@@ -12,9 +12,21 @@ async def get_my_community(user_id: str = Depends(get_current_user_id)):
     tier = await svc.compute_tier(user_id)
     repo = CommunityRepository()
     community = await repo.get_by_tier(tier)
+    member_count = await repo.count_members_by_tier(tier)
+    if community:
+        return {
+            "id": str(community.id) if community.id else "",
+            "tier": tier,
+            "name": community.name,
+            "member_count": member_count,
+            "challenges": [],
+        }
     return {
+        "id": "",
         "tier": tier,
-        "community": community.model_dump(by_alias=False) if community else None,
+        "name": tier.capitalize(),
+        "member_count": member_count,
+        "challenges": [],
     }
 
 

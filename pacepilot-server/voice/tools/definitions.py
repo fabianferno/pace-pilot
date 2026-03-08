@@ -1,6 +1,32 @@
 from pipecat.adapters.schemas.function_schema import FunctionSchema
 from pipecat.adapters.schemas.tools_schema import ToolsSchema
 
+# Used during active runs — biometric tools are restricted to explicit runner requests only.
+# Keep this list small: no plan generation, no calendar, no social during a run.
+ACTIVE_RUN_TOOLS = ToolsSchema(standard_tools=[
+    FunctionSchema(
+        name="get_current_biometrics",
+        description="ONLY call this when the runner explicitly asks for their current HR, pace, or distance. Do NOT call proactively.",
+        properties={}, required=[],
+    ),
+    FunctionSchema(
+        name="get_run_progress",
+        description="ONLY call this when the runner explicitly asks how far they've gone or how long they've been running. Do NOT call proactively.",
+        properties={}, required=[],
+    ),
+    FunctionSchema(
+        name="get_todays_workout",
+        description="Call when the runner asks what today's workout target or goal is.",
+        properties={}, required=[],
+    ),
+    FunctionSchema(
+        name="mark_not_feeling_well",
+        description="Call when the runner says they feel unwell or want an easier session.",
+        properties={}, required=[],
+    ),
+])
+
+# Full tool set for non-run sessions (general, onboarding, pre_run, post_run, replan).
 PACEPILOT_TOOLS = ToolsSchema(standard_tools=[
     FunctionSchema(name="get_current_biometrics", description="Returns real-time HR, pace, distance, cadence.", properties={}, required=[]),
     FunctionSchema(name="get_run_progress", description="Returns current run distance, elapsed time, splits.", properties={}, required=[]),
