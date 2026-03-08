@@ -1,3 +1,4 @@
 pacepilot-server/
 pacepilot-server/.env
 PacePilot/build/
+.worktrees/

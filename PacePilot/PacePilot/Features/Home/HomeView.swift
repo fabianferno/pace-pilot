@@ -73,7 +73,10 @@ struct HomeView: View {
         HStack(spacing: 0) {
             statItem(value: String(format: "%.1f", vm.weeklyDistanceKm), label: "km this week")
             Divider().frame(height: 40)
-            statItem(value: "\(vm.weeklyRuns)", label: "runs")
+            NavigationLink(destination: RunHistoryView()) {
+                statItem(value: "\(vm.weeklyRuns)", label: "runs")
+            }
+            .buttonStyle(.plain)
         }
         .padding()
         .background(Color(.secondarySystemGroupedBackground))
