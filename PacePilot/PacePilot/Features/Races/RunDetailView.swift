@@ -80,3 +80,12 @@ struct RunDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+#if DEBUG
+#Preview("Run Detail") {
+    NavigationStack {
+        RunDetailView(run: PreviewData.communityRuns[0], vm: RunsViewModel())
+    }
+    .preferredColorScheme(.dark)
+}
+#endif

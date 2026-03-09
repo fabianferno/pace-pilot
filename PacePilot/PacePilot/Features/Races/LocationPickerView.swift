@@ -30,7 +30,9 @@ struct LocationPickerView: View {
                 .cornerRadius(10)
                 .padding()
 
-                if !results.isEmpty && selectedCoordinate == nil {
+                if results.isEmpty && selectedCoordinate == nil {
+                    Spacer()
+                } else if !results.isEmpty && selectedCoordinate == nil {
                     List(results, id: \.self) { item in
                         Button(action: { select(item) }) {
                             VStack(alignment: .leading) {
@@ -50,9 +52,17 @@ struct LocationPickerView: View {
                     Button("Confirm Location") {
                         Task { await confirmLocation(coord) }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding()
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Color.green)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
                 }
+
+                Spacer()
             }
             .navigationTitle("Pick Location")
             .navigationBarTitleDisplayMode(.inline)
@@ -101,3 +111,10 @@ struct LocationPickerView: View {
         onSelect(coord, selectedLocation, city)
     }
 }
+
+#if DEBUG
+#Preview("Location Picker") {
+    LocationPickerView { _, _, _ in }
+        .preferredColorScheme(.dark)
+}
+#endif

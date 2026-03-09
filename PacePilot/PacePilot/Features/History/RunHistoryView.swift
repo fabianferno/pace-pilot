@@ -6,7 +6,7 @@ struct RunHistoryView: View {
     var body: some View {
         NavigationStack {
             List(vm.runs) { run in
-                NavigationLink(destination: RunDetailView(run: run)) {
+                NavigationLink(destination: RunHistoryDetailView(run: run)) {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(run.startedAt.formatted(date: .abbreviated, time: .shortened)).font(.headline)
                         HStack(spacing: 16) {
@@ -24,7 +24,7 @@ struct RunHistoryView: View {
     }
 }
 
-struct RunDetailView: View {
+struct RunHistoryDetailView: View {
     let run: RunSession
 
     var body: some View {
@@ -80,3 +80,17 @@ struct RunDetailView: View {
         .cornerRadius(16)
     }
 }
+
+#if DEBUG
+#Preview("Run History") {
+    RunHistoryView()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Run Detail") {
+    NavigationStack {
+        RunHistoryDetailView(run: PreviewData.runSession)
+    }
+    .preferredColorScheme(.dark)
+}
+#endif

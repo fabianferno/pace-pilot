@@ -174,13 +174,7 @@ struct ProfileView: View {
                     .multilineTextAlignment(.trailing)
                     .foregroundColor(.secondary)
             }
-            HStack {
-                Text("City")
-                Spacer()
-                TextField("Your city", text: $city)
-                    .multilineTextAlignment(.trailing)
-                    .foregroundColor(.secondary)
-            }
+            CitySearchField(city: $city)
         }
     }
 
@@ -327,3 +321,15 @@ struct ProfileView: View {
         await vm.save(request)
     }
 }
+
+#if DEBUG
+#Preview("Profile") {
+    ProfileView()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Coach Chat") {
+    CoachChatSheet()
+        .preferredColorScheme(.dark)
+}
+#endif

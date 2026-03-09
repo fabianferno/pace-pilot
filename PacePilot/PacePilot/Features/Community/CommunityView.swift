@@ -6,12 +6,6 @@ struct CommunityView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    communityHeaderCard
-                        .listRowInsets(EdgeInsets())
-                        .listRowBackground(Color.clear)
-                }
-
                 howItWorksSection
 
                 if let community = vm.community {
@@ -81,49 +75,28 @@ struct CommunityView: View {
         }
     }
 
-    var communityHeaderCard: some View {
-        ZStack(alignment: .bottomTrailing) {
-            LinearGradient(
-                colors: [Color.accentColor.opacity(0.85), Color.accentColor.opacity(0.35)],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
-
-            Image("RunnerFemale")
-                .resizable()
-                .scaledToFit()
-                .frame(height: 145)
-                .padding(.bottom, -4)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Run Together")
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
-                Text("Your community, your pace.")
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.85))
-                Spacer()
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .frame(height: 160)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-    }
-
     var howItWorksSection: some View {
         Section {
-            VStack(alignment: .leading, spacing: 10) {
-                Label("How Community Works", systemImage: "info.circle")
-                    .font(.subheadline.bold())
-                    .foregroundColor(.accentColor)
-                Text("You're automatically placed into a tier based on your average easy-run pace over the past 4 weeks. As you run more consistently, you move up through **Discovery → Foundation → Momentum → Velocity → Elite**. Tiers update every week.")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+            ZStack(alignment: .bottomTrailing) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Your community, your pace")
+                        .font(.title3.bold())
+                        .foregroundColor(.accentColor)
+                    Text("You're automatically placed into a tier based on your average easy-run pace over the past 4 weeks. As you run more consistently, you move up through **Discovery → Foundation → Momentum → Velocity → Elite**. Tiers update every week.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.trailing, 140)
+                }
+                .padding(.vertical, 4)
+
+                Image("RunnerFemale")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 150)
+                    .offset(x: 85)
+                    .accessibilityHidden(true)
             }
-            .padding(.vertical, 4)
         }
     }
 
@@ -159,3 +132,10 @@ struct CommunityView: View {
             .cornerRadius(8)
     }
 }
+
+#if DEBUG
+#Preview("Community") {
+    CommunityView()
+        .preferredColorScheme(.dark)
+}
+#endif

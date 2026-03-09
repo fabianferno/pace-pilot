@@ -91,3 +91,10 @@ struct ReplanSheet: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Replan Sheet") {
+    ReplanSheet()
+        .preferredColorScheme(.dark)
+}
+#endif

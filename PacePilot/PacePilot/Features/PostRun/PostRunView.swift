@@ -87,3 +87,10 @@ struct PostRunView: View {
         .cornerRadius(16)
     }
 }
+
+#if DEBUG
+#Preview("Post Run") {
+    PostRunView(runRequest: PreviewData.newRunRequest)
+        .preferredColorScheme(.dark)
+}
+#endif

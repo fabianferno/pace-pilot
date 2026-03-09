@@ -103,3 +103,10 @@ struct CreateRunView: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Create Run") {
+    CreateRunView(vm: RunsViewModel())
+        .preferredColorScheme(.dark)
+}
+#endif

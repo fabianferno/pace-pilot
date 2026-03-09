@@ -15,29 +15,29 @@ struct RunDiscoveryView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    runsHeaderCard
-                        .padding(.horizontal)
-                        .padding(.top)
-
                     if vm.isLoading {
                         ProgressView()
                             .frame(maxWidth: .infinity, minHeight: 200)
                     } else if displayedRuns.isEmpty {
                         emptyStateView
                     } else {
-                        LazyVStack(spacing: 0) {
+                        LazyVStack(spacing: 12) {
                             ForEach(displayedRuns) { run in
                                 NavigationLink(destination: RunDetailView(run: run, vm: vm)) {
                                     RunRow(run: run)
-                                        .padding(.horizontal)
-                                        .padding(.vertical, 8)
+                                        .padding()
+                                        .background(Color(.secondarySystemGroupedBackground))
+                                        .cornerRadius(16)
                                 }
                                 .buttonStyle(.plain)
-                                Divider()
-                                    .padding(.horizontal)
                             }
                         }
+                        .padding(.horizontal)
+                        .padding(.top, 12)
                     }
+                    runsHeaderCard
+                        .padding(.horizontal)
+                        .padding(.top)
                 }
             }
             .navigationTitle("Runs")
@@ -70,29 +70,20 @@ struct RunDiscoveryView: View {
 
     var runsHeaderCard: some View {
         ZStack(alignment: .bottomTrailing) {
-            LinearGradient(
-                colors: [
-                    Color(red: 0.08, green: 0.08, blue: 0.12),
-                    Color(red: 0.18, green: 0.18, blue: 0.28)
-                ],
-                startPoint: .leading,
-                endPoint: .trailing
-            )
+            Color(.secondarySystemGroupedBackground)
 
             Image("RunnerMale")
                 .resizable()
                 .scaledToFit()
-                .frame(height: 150)
-                .padding(.bottom, -4)
+                .frame(height: 158)
+                .offset(x: 70)
+                .padding(.bottom, 1)
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text("Discover Runs")
+                Text("Find your\nnext group run")
                     .font(.title2.bold())
-                    .foregroundColor(.white)
-                Text("Find your next group run.")
-                    .font(.caption)
-                    .foregroundColor(.white.opacity(0.85))
+                    .foregroundColor(.primary)
                 Spacer()
             }
             .padding()
@@ -154,3 +145,10 @@ private struct RunRow: View {
         .padding(.vertical, 4)
     }
 }
+
+#if DEBUG
+#Preview("Run Discovery") {
+    RunDiscoveryView()
+        .preferredColorScheme(.dark)
+}
+#endif

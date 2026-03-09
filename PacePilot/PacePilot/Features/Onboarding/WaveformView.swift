@@ -72,3 +72,21 @@ private struct _Bar: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Waveform Active") {
+    WaveformView(isActive: true)
+        .frame(height: 60)
+        .padding()
+        .background(Color.black)
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Waveform Idle") {
+    WaveformView(isActive: false)
+        .frame(height: 60)
+        .padding()
+        .background(Color.black)
+        .preferredColorScheme(.dark)
+}
+#endif

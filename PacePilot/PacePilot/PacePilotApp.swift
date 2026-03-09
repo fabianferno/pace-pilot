@@ -44,15 +44,23 @@ struct SplashView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            VStack(spacing: 32) {
+
+            GIFImageView(name: "artistic-runner")
+                .ignoresSafeArea()
+                .opacity(0.35)
+                .accessibilityHidden(true)
+
+            VStack {
+                Spacer()
                 Image("AppLogo")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                Text("PacePilot")
+                Text("PacePilot AI")
                     .font(.largeTitle.bold())
                     .foregroundColor(.accentColor)
+                    .padding(.bottom, 24)
                 Button(action: { auth.signInWithApple() }) {
                     HStack(spacing: 14) {
                         Image(systemName: "apple.logo")
@@ -67,6 +75,7 @@ struct SplashView: View {
                     .cornerRadius(14)
                 }
                 .padding(.horizontal, 40)
+                .padding(.bottom, 60)
             }
         }
     }
@@ -89,3 +98,16 @@ struct MainTabView: View {
         .accentColor(.accentColor)
     }
 }
+
+#if DEBUG
+#Preview("Main Tabs") {
+    MainTabView()
+        .preferredColorScheme(.dark)
+}
+
+#Preview("Splash") {
+    SplashView()
+        .environmentObject(AuthManager.shared)
+        .preferredColorScheme(.dark)
+}
+#endif

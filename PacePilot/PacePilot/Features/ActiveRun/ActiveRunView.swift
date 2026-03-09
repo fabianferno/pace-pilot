@@ -111,3 +111,10 @@ struct ActiveRunView: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Active Run") {
+    ActiveRunView()
+        .preferredColorScheme(.dark)
+}
+#endif

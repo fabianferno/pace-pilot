@@ -94,3 +94,10 @@ struct OnboardingView: View {
         }
     }
 }
+
+#if DEBUG
+#Preview("Onboarding") {
+    OnboardingView()
+        .preferredColorScheme(.dark)
+}
+#endif

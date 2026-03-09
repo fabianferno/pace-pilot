@@ -29,7 +29,7 @@ struct HomeView: View {
                             .scaledToFit()
                             .frame(width: 36, height: 36)
                             .clipShape(RoundedRectangle(cornerRadius: 9, style: .continuous))
-                        Text("PacePilot")
+                        Text("PacePilot AI")
                             .font(.title3.bold())
                             .foregroundColor(.primary)
                     }
@@ -46,11 +46,15 @@ struct HomeView: View {
         ZStack(alignment: .bottomLeading) {
             GIFImageView(name: "artistic-runner")
                 .frame(maxWidth: .infinity)
-                .frame(height: 180)
+                .frame(height: 300)
                 .accessibilityHidden(true)
 
             LinearGradient(
-                colors: [.black.opacity(0.6), .black.opacity(0.1), .clear],
+                colors: [
+                    .black.opacity(1), 
+                    .black.opacity(0.7), 
+                    .black.opacity(0.3)
+                ],
                 startPoint: .bottom,
                 endPoint: .top
             )
@@ -65,7 +69,7 @@ struct HomeView: View {
             }
             .padding()
         }
-        .frame(height: 180)
+        .frame(height: 300)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 
@@ -133,4 +137,8 @@ struct HomeView: View {
                 .cornerRadius(16)
         }
     }
+}
+
+#Preview("Workout Day") {
+    HomeView().preferredColorScheme(.dark)
 }
