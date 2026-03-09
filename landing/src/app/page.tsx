@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Mic,
   Heart,
-  Activity,
   Calendar,
   Users,
   Trophy,
@@ -47,12 +46,14 @@ function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-[#AAFF00] flex items-center justify-center">
-              <Activity className="w-5 h-5 text-black" />
-            </div>
+          <a href="/" className="flex items-center gap-2">
+            <img
+              src="/logo/logo.png"
+              alt="PacePilot"
+              className="w-8 h-8 object-contain"
+            />
             <span className="font-bold text-lg">PacePilot</span>
-          </div>
+          </a>
           <nav className="hidden md:flex items-center gap-8">
             <a href="#features" className="text-sm text-gray-400 hover:text-white transition-colors">Features</a>
             <a href="#how-it-works" className="text-sm text-gray-400 hover:text-white transition-colors">How It Works</a>
@@ -78,25 +79,25 @@ function HeroSection() {
     <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-[#AAFF00]/5 via-transparent to-transparent" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#AAFF00]/10 rounded-full blur-3xl" />
-      
+
       <div className="max-w-7xl mx-auto relative">
         <div className="text-center max-w-4xl mx-auto">
           <Badge className="mb-6 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20 hover:bg-[#AAFF00]/20">
             <Mic className="w-3 h-3 mr-1" />
             Voice-First AI Coaching
           </Badge>
-          
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-6">
+
+          <h1 className="font-coolvetica text-4xl md:text-8xl font-light tracking-tight mb-6">
             Your Personal
             <span className="gradient-text block">Running Coach</span>
             On Every Run
           </h1>
-          
+
           <p className="text-lg sm:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-            Stop running alone. PacePilot is an AI coach that speaks to you in real-time, 
+            Stop running alone. PacePilot is an AI coach that speaks to you in real-time,
             adapts to your biometrics, and builds a training relationship that gets you to your goals.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Button size="lg" className="bg-[#AAFF00] text-black hover:bg-[#88CC00] text-base font-semibold px-8 animate-pulse-glow">
               Start Your First Coached Run
@@ -107,7 +108,7 @@ function HeroSection() {
               Watch Demo
             </Button>
           </div>
-          
+
           <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
             <div className="flex items-center gap-2">
               <div className="flex -space-x-2">
@@ -125,7 +126,7 @@ function HeroSection() {
             </div>
           </div>
         </div>
-        
+
         <div className="mt-16 relative">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
           <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/10 p-4 sm:p-8 glow-border">
@@ -168,15 +169,15 @@ function ProblemSection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black to-gray-950">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-coolvetica text-3xl sm:text-4xl font-light mb-4">
             Running Alone is <span className="text-gray-500">Holding You Back</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            You&apos;ve downloaded the apps. You&apos;ve followed the plans. But something&apos;s missing — 
+            You&apos;ve downloaded the apps. You&apos;ve followed the plans. But something&apos;s missing —
             a coach who actually knows you, sees your data, and speaks to you when you need it.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-6">
           {problems.map((problem, index) => (
             <Card key={index} className="bg-gray-900/50 border-white/5 hover:border-[#AAFF00]/20 transition-colors">
@@ -190,10 +191,10 @@ function ProblemSection() {
             </Card>
           ))}
         </div>
-        
+
         <div className="mt-12 text-center">
           <p className="text-xl text-gray-300">
-            What if your coach could <span className="text-[#AAFF00]">see your heart rate spike</span> and 
+            What if your coach could <span className="text-[#AAFF00]">see your heart rate spike</span> and
             tell you to ease up — <span className="text-[#AAFF00]">before</span> you blow up?
           </p>
         </div>
@@ -206,22 +207,22 @@ function SolutionSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 relative">
       <div className="absolute inset-0 bg-gradient-to-r from-[#AAFF00]/5 via-transparent to-[#AAFF00]/5" />
-      
+
       <div className="max-w-7xl mx-auto relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
             <Badge className="mb-4 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20">
               The Solution
             </Badge>
-            <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+            <h2 className="font-coolvetica text-3xl sm:text-4xl font-light mb-6">
               Meet PacePilot: Your Coach That&apos;s <span className="gradient-text">Always With You</span>
             </h2>
             <p className="text-gray-400 mb-8">
-              PacePilot is a voice-first AI running coach powered by Google Gemini. It doesn&apos;t just 
-              give you a plan — it rides alongside you on every run, watching your biometrics, 
+              PacePilot is a voice-first AI running coach powered by Google Gemini. It doesn&apos;t just
+              give you a plan — it rides alongside you on every run, watching your biometrics,
               adapting in real-time, and building a coaching relationship that gets smarter every mile.
             </p>
-            
+
             <div className="space-y-4">
               {[
                 "Real-time voice coaching during your runs",
@@ -238,29 +239,31 @@ function SolutionSection() {
               ))}
             </div>
           </div>
-          
+
           <div className="relative">
             <div className="absolute -inset-4 bg-[#AAFF00]/10 rounded-3xl blur-2xl" />
             <Card className="bg-gray-900 border-white/10 relative glow-border">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-[#AAFF00] flex items-center justify-center">
-                    <Mic className="w-5 h-5 text-black" />
-                  </div>
+                  <img
+                    src="/logo/logo.png"
+                    alt="PacePilot"
+                    className="w-10 h-10 rounded-full object-contain bg-[#AAFF00]/20 p-1"
+                  />
                   <div>
                     <p className="font-semibold">PacePilot</p>
                     <p className="text-xs text-gray-400">Active Run • 4.2 km</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div className="bg-black/50 rounded-xl p-4">
                     <p className="text-sm text-gray-300 italic">
-                      &quot;Great first kilometer! Your heart rate is sitting at 142 — perfect Zone 2. 
+                      &quot;Great first kilometer! Your heart rate is sitting at 142 — perfect Zone 2.
                       This is exactly where we want to be for your easy run. How are your legs feeling?&quot;
                     </p>
                   </div>
-                  
+
                   <div className="grid grid-cols-3 gap-3">
                     <div className="bg-black/50 rounded-lg p-3 text-center">
                       <p className="text-2xl font-bold text-[#AAFF00]">5:24</p>
@@ -275,7 +278,7 @@ function SolutionSection() {
                       <p className="text-xs text-gray-400">Distance km</p>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-center justify-center">
                     <div className="flex items-center gap-2 text-[#AAFF00]">
                       <div className="w-2 h-2 rounded-full bg-[#AAFF00] animate-pulse" />
@@ -339,15 +342,15 @@ function FeaturesSection() {
           <Badge className="mb-4 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20">
             Features
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-coolvetica text-3xl sm:text-4xl font-light mb-4">
             Everything You Need to <span className="gradient-text">Run Your Best</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            PacePilot combines cutting-edge AI with deep running expertise to deliver 
+            PacePilot combines cutting-edge AI with deep running expertise to deliver
             coaching that was previously only available to elite athletes.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card key={index} className="bg-gray-900/30 border-white/5 hover:border-[#AAFF00]/30 transition-all hover:transform hover:scale-[1.02] group">
@@ -405,14 +408,14 @@ function HowItWorksSection() {
           <Badge className="mb-4 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20">
             How It Works
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-coolvetica text-3xl sm:text-4xl font-light mb-4">
             From Download to <span className="gradient-text">Personal Best</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Getting started takes less than 5 minutes. Your first coached run? That&apos;s today.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <div key={index} className="relative">
@@ -467,14 +470,14 @@ function TestimonialsSection() {
           <Badge className="mb-4 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20">
             Testimonials
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-coolvetica text-3xl sm:text-4xl font-light mb-4">
             Runners Who Found Their <span className="gradient-text">Breakthrough</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Join thousands of runners who&apos;ve transformed their training with PacePilot.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <Card key={index} className="bg-gray-900/50 border-white/5 hover:border-[#AAFF00]/20 transition-colors">
@@ -503,7 +506,7 @@ function TestimonialsSection() {
             </Card>
           ))}
         </div>
-        
+
         <div className="mt-12 flex flex-wrap items-center justify-center gap-8 opacity-50">
           <p className="text-sm text-gray-400">As featured in:</p>
           <div className="flex items-center gap-8">
@@ -575,23 +578,22 @@ function PricingSection() {
           <Badge className="mb-4 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20">
             Pricing
           </Badge>
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+          <h2 className="font-coolvetica text-3xl  md:text-5xl font-light mb-4">
             Invest in Your <span className="gradient-text">Running Journey</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Start free, upgrade when you&apos;re ready. Cancel anytime.
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
-            <Card 
-              key={index} 
-              className={`relative ${
-                plan.highlighted 
-                  ? "bg-gradient-to-b from-[#AAFF00]/10 to-gray-900 border-[#AAFF00]/30 glow-border" 
-                  : "bg-gray-900/50 border-white/5"
-              }`}
+            <Card
+              key={index}
+              className={`relative ${plan.highlighted
+                ? "bg-gradient-to-b from-[#AAFF00]/10 to-gray-900 border-[#AAFF00]/30 glow-border"
+                : "bg-gray-900/50 border-white/5"
+                }`}
             >
               {plan.highlighted && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -605,7 +607,7 @@ function PricingSection() {
                   <span className="text-gray-400">{plan.period}</span>
                 </div>
                 <p className="text-gray-400 text-sm mb-6">{plan.description}</p>
-                
+
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm">
@@ -614,13 +616,12 @@ function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                
-                <Button 
-                  className={`w-full ${
-                    plan.highlighted 
-                      ? "bg-[#AAFF00] text-black hover:bg-[#88CC00]" 
-                      : "bg-white/10 hover:bg-white/20"
-                  }`}
+
+                <Button
+                  className={`w-full ${plan.highlighted
+                    ? "bg-[#AAFF00] text-black hover:bg-[#88CC00]"
+                    : "bg-white/10 hover:bg-white/20"
+                    }`}
                 >
                   {plan.cta}
                 </Button>
@@ -638,23 +639,23 @@ function CTASection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-r from-[#AAFF00]/10 via-[#AAFF00]/5 to-[#AAFF00]/10" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#AAFF00]/10 rounded-full blur-3xl" />
-      
+
       <div className="max-w-4xl mx-auto text-center relative">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6">
+        <h2 className="font-coolvetica text-3xl  md:text-7xl font-light mb-6">
           Ready to Run With a Coach Who <span className="gradient-text">Actually Knows You?</span>
         </h2>
         <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
-          Your first coached run is waiting. No credit card required. 
+          Your first coached run is waiting. No credit card required.
           Just you, your shoes, and a coach that&apos;s about to change everything.
         </p>
-        
+
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <Button size="lg" className="bg-[#AAFF00] text-black hover:bg-[#88CC00] text-base font-semibold px-8 animate-pulse-glow">
             Start Your Free Coached Run
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
-        
+
         <div className="flex items-center justify-center gap-6 text-sm text-gray-400">
           <div className="flex items-center gap-2">
             <Smartphone className="w-4 h-4" />
@@ -681,16 +682,18 @@ function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-[#AAFF00] flex items-center justify-center">
-                <Activity className="w-5 h-5 text-black" />
-              </div>
+              <img
+                src="/logo/logo.png"
+                alt="PacePilot"
+                className="w-8 h-8 object-contain"
+              />
               <span className="font-bold text-lg">PacePilot</span>
             </div>
             <p className="text-gray-400 text-sm">
               Your AI running coach that&apos;s with you on every run.
             </p>
           </div>
-          
+
           <div>
             <h4 className="font-semibold mb-4">Product</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -700,7 +703,7 @@ function Footer() {
               <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -710,7 +713,7 @@ function Footer() {
               <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-semibold mb-4">Legal</h4>
             <ul className="space-y-2 text-sm text-gray-400">
@@ -720,20 +723,20 @@ function Footer() {
             </ul>
           </div>
         </div>
-        
+
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-400">
             © 2026 PacePilot. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-gray-400 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" /></svg>
             </a>
             <a href="#" className="text-gray-400 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" /></svg>
             </a>
             <a href="#" className="text-gray-400 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
             </a>
           </div>
         </div>
