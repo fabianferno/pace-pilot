@@ -87,11 +87,17 @@ function HeroSection() {
             Voice-First AI Coaching
           </Badge>
 
-          <h1 className="font-coolvetica text-4xl md:text-8xl font-light tracking-tight mb-6">
-            Your Personal
-            <span className="gradient-text block">Running Coach</span>
-            On Every Run
-          </h1>
+          <div className="font-coolvetica text-4xl md:text-8xl font-light tracking-tight mb-6">
+            <div className="-my-2">
+              Your Personal
+            </div>
+            <div className="gradient-text block -my-2">
+              Running Coach
+            </div>
+            <div className="-my-2">
+              On Every Run
+            </div>
+          </div>
 
           <p className="text-lg sm:text-xl text-gray-400 mb-8 max-w-2xl mx-auto">
             Stop running alone. PacePilot is an AI coach that speaks to you in real-time,

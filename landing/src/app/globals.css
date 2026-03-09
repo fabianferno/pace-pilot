@@ -175,6 +175,9 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Prevent descenders (g, y, p, q) from being clipped */
+  padding-bottom: 0.08em;
+  display: inline-block;
 }
 
 .glow-border {
