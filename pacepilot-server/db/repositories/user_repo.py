@@ -47,3 +47,35 @@ class UserRepository:
                 "weekly_runs": doc["weekly_runs"],
             }
         return {"weekly_distance_km": 0.0, "weekly_runs": 0}
+
+    async def upsert_device_token(self, user_id: str, token: str, platform: str) -> None:
+        await self.col.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$pull": {"device_tokens": {"platform": platform}}}
+        )
+        await self.col.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$push": {"device_tokens": {"token": token, "platform": platform, "updated_at": datetime.utcnow()}},
+                "$set": {"updated_at": datetime.utcnow()},
+            }
+        )
+
+    async def remove_device_token(self, user_id: str, token: str) -> None:
+        await self.col.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$pull": {"device_tokens": {"token": token}}, "$set": {"updated_at": datetime.utcnow()}}
+        )
+
+    async def update_notification_preferences(self, user_id: str, prefs: dict) -> None:
+        await self.col.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"notification_preferences": prefs, "updated_at": datetime.utcnow()}}
+        )
+
+    async def get_users_with_tokens(self, user_ids: list[str]) -> list[UserDB]:
+        cursor = self.col.find({
+            "_id": {"$in": [ObjectId(uid) for uid in user_ids]},
+            "device_tokens.0": {"$exists": True},
+        })
+        return [UserDB(**doc) async for doc in cursor]
