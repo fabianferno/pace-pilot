@@ -170,6 +170,20 @@
   animation: float 3s ease-in-out infinite;
 }
 
+@keyframes sound-wave {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-sound-wave {
+  animation: sound-wave 0.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
 .gradient-text {
   background: linear-gradient(135deg, #AAFF00 0%, #88CC00 100%);
   -webkit-background-clip: text;
