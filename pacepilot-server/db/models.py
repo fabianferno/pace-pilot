@@ -37,6 +37,13 @@ class UserDB(BaseModel):
     max_hr: Optional[int] = None
     preferred_days: List[int] = []
     city: Optional[str] = None
+    device_tokens: List[dict] = []
+    notification_preferences: dict = Field(default_factory=lambda: {
+        "workout_reminder": True,
+        "post_run": True,
+        "social": True,
+        "race_alert": True,
+    })
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Config:
