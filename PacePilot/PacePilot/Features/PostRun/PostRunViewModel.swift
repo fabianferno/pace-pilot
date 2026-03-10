@@ -20,6 +20,9 @@ final class PostRunViewModel: ObservableObject {
         isSaving = true
         do {
             savedSession = try await api.post("/api/runs", body: run)
+            if let session = savedSession {
+                NotificationService.shared.sendPostRunCelebration(session: session)
+            }
         } catch {
             self.error = error.localizedDescription
         }
