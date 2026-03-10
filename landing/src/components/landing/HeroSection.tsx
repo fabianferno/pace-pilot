@@ -12,7 +12,7 @@ export function HeroSection() {
       <div className="max-w-7xl mx-auto relative">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Hero text - left */}
-          <div className="order-2 lg:order-1 text-center lg:text-left">
+          <div className="order-1 lg:order-1 text-center lg:text-left">
             <Badge className="mb-6 bg-[#AAFF00]/10 text-[#AAFF00] border-[#AAFF00]/20 hover:bg-[#AAFF00]/20">
               <Mic className="w-3 h-3 mr-1" />
               Voice-First AI Coaching
@@ -70,7 +70,7 @@ export function HeroSection() {
           </div>
 
           {/* iPhone mockup - right */}
-          <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+          <div className="order-2 lg:order-2 flex justify-center lg:justify-end">
             <div className="relative">
               <div className="absolute -inset-4 bg-[#AAFF00]/10 rounded-[4rem] blur-2xl" />
               <div className="relative w-[280px] sm:w-[320px] mx-auto">
