@@ -21,6 +21,7 @@ final class PlanViewModel: ObservableObject {
                 workouts = try await api.get("/api/plans/\(id)/workouts")
             }
             completedRuns = (try? await api.get("/api/runs")) ?? []
+            NotificationService.shared.scheduleWorkoutReminders(for: workouts)
         } catch {}
     }
 
