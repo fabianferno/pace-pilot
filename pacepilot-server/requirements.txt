@@ -18,3 +18,4 @@ pytest-mock>=3.14.0
 cryptography>=42.0.0
 certifi
 pyopenssl
+aioapns>=3.2
