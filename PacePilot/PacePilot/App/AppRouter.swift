@@ -12,6 +12,9 @@ final class AppRouter: ObservableObject {
     static let shared = AppRouter()
 
     @Published var route: AppRoute = .splash
+    @Published var selectedTab: Int = 0
+    @Published var pendingRunId: String?
+    @Published var pendingRaceId: String?
     private var cancellables = Set<AnyCancellable>()
     private let auth: AuthManager
 
@@ -30,5 +33,24 @@ final class AppRouter: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+    }
+
+    func handleNotificationRoute(_ route: String) {
+        guard self.route == .main else { return }
+        let parts = route.split(separator: "/").map(String.init)
+        switch parts.first {
+        case "run":
+            if parts.count > 1 { pendingRunId = parts[1] }
+            selectedTab = 3
+        case "community":
+            selectedTab = 2
+        case "races":
+            if parts.count > 1 { pendingRaceId = parts[1] }
+            selectedTab = 3
+        case "plan":
+            selectedTab = 1
+        default:
+            break
+        }
     }
 }

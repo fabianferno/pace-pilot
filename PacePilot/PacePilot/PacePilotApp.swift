@@ -82,18 +82,25 @@ struct SplashView: View {
 }
 
 struct MainTabView: View {
+    @EnvironmentObject var router: AppRouter
+
     var body: some View {
-        TabView {
+        TabView(selection: $router.selectedTab) {
             HomeView()
                 .tabItem { Label("Home", systemImage: "house.fill") }
+                .tag(0)
             PlanView()
                 .tabItem { Label("Plan", systemImage: "calendar") }
+                .tag(1)
             CommunityView()
                 .tabItem { Label("Community", systemImage: "person.3.fill") }
+                .tag(2)
             RunDiscoveryView()
                 .tabItem { Label("Runs", systemImage: "figure.run") }
+                .tag(3)
             ProfileView()
                 .tabItem { Label("Profile", systemImage: "person.fill") }
+                .tag(4)
         }
         .accentColor(.accentColor)
     }
