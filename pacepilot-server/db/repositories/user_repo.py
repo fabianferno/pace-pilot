@@ -49,16 +49,28 @@ class UserRepository:
         return {"weekly_distance_km": 0.0, "weekly_runs": 0}
 
     async def upsert_device_token(self, user_id: str, token: str, platform: str) -> None:
+        """Atomically replace the device token for a given platform using an aggregation pipeline update."""
+        now = datetime.utcnow()
         await self.col.update_one(
             {"_id": ObjectId(user_id)},
-            {"$pull": {"device_tokens": {"platform": platform}}}
-        )
-        await self.col.update_one(
-            {"_id": ObjectId(user_id)},
-            {
-                "$push": {"device_tokens": {"token": token, "platform": platform, "updated_at": datetime.utcnow()}},
-                "$set": {"updated_at": datetime.utcnow()},
-            }
+            [
+                {
+                    "$set": {
+                        "device_tokens": {
+                            "$concatArrays": [
+                                {
+                                    "$filter": {
+                                        "input": {"$ifNull": ["$device_tokens", []]},
+                                        "cond": {"$ne": ["$$this.platform", platform]},
+                                    }
+                                },
+                                [{"token": token, "platform": platform, "updated_at": now}],
+                            ]
+                        },
+                        "updated_at": now,
+                    }
+                }
+            ],
         )
 
     async def remove_device_token(self, user_id: str, token: str) -> None:

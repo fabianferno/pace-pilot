@@ -40,14 +40,15 @@ async def _notify_run_completion(user_id: str, run_id: str, distance_km: float):
         display_name = getattr(user, "display_name", None) or "A runner"
         notifier = NotificationService.get_instance()
 
-        # Send a confirmation push to the runner themselves
-        if getattr(user, "device_tokens", None):
+        # Send a confirmation push to the runner (respecting preferences)
+        prefs = getattr(user, "notification_preferences", {})
+        if prefs.get("post_run", True) and getattr(user, "device_tokens", None):
             await notifier.send_to_user(
                 user_tokens=user.device_tokens,
                 title="Run Complete!",
                 body=f"Great job on your {distance_km:.1f} km run!",
-                category="run_complete",
-                route=f"/runs/{run_id}",
+                category="post_run",
+                route=f"run/{run_id}",
                 metadata={"run_id": run_id},
             )
 

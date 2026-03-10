@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NotificationPreferencesView: View {
-    @StateObject private var notifications = NotificationService.shared
+    @ObservedObject private var notifications = NotificationService.shared
 
     var body: some View {
         Form {

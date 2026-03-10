@@ -53,13 +53,14 @@ async def _notify_community_run_created(run_name: str, run_id: str, city: str, r
         notifier = NotificationService.get_instance()
 
         for user in users:
-            if getattr(user, "device_tokens", None):
+            prefs = getattr(user, "notification_preferences", {})
+            if prefs.get("social", True) and getattr(user, "device_tokens", None):
                 await notifier.send_to_user(
                     user_tokens=user.device_tokens,
                     title="New Community Run!",
                     body=f"'{run_name}' has been created in {city}. Check it out!",
-                    category="community_run",
-                    route=f"/community-runs/{run_id}",
+                    category="social",
+                    route=f"community",
                     metadata={"community_run_id": run_id},
                 )
     except Exception as e:
