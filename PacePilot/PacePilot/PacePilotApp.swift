@@ -4,8 +4,25 @@ extension Notification.Name {
     static let stravaConnected = Notification.Name("stravaConnected")
 }
 
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+    ) {
+        NotificationService.shared.handleDeviceToken(deviceToken)
+    }
+
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithDeviceToken error: Error
+    ) {
+        NotificationService.shared.handleTokenError(error)
+    }
+}
+
 @main
 struct PacePilotApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var router = AppRouter.shared
     @StateObject private var auth = AuthManager.shared
     @StateObject private var apiClient = APIClient.shared
@@ -17,6 +34,9 @@ struct PacePilotApp: App {
                 .environmentObject(auth)
                 .environmentObject(apiClient)
                 .task { await auth.validateSession() }
+                .task {
+                    await NotificationService.shared.requestAuthorization()
+                }
                 .onOpenURL { url in
                     if url.host == "strava-connected" {
                         NotificationCenter.default.post(name: .stravaConnected, object: nil)
