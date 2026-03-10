@@ -120,6 +120,7 @@ struct ProfileView: View {
                 trainingGoalSection
                 scheduleSection
                 heartRateSection
+                notificationsSection
                 coachSection
                 connectionsSection
                 accountSection
@@ -248,6 +249,16 @@ struct ProfileView: View {
                     .frame(width: 60)
                     .foregroundColor(.secondary)
                 Text("bpm").foregroundColor(.secondary)
+            }
+        }
+    }
+
+    var notificationsSection: some View {
+        Section {
+            NavigationLink {
+                NotificationPreferencesView()
+            } label: {
+                Label("Notifications", systemImage: "bell.fill")
             }
         }
     }
