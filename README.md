@@ -4,11 +4,9 @@ A voice-first AI running coach powered by Google Gemini Live. PacePilot talks to
 
 ## Architecture
 
-```
-Apple Watch ──(BLE/WatchConnectivity @ 3s)──► iOS App ──(WebRTC)──► FastAPI + Pipecat ──(WebSocket)──► Gemini Live (Vertex AI)
-   HR, pace, GPS                              Stream biometrics       Context injection        Voice coaching
-                                              + audio                 + 16 tool calls          + function calling
-```
+<img width="2270" height="1044" alt="image" src="https://github.com/user-attachments/assets/76957300-369d-4fb6-bbea-a8d2402c3cf7" />
+
+
 
 The voice agent runs **server-side**: the iOS app streams audio via WebRTC (Daily transport) to a Python backend running Pipecat, which manages a bidirectional WebSocket to Gemini Live on Vertex AI. Real-time biometrics from the Apple Watch are injected into the pipeline context so Gemini's tool calls always return current sensor data.
 
