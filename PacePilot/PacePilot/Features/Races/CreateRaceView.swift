@@ -39,7 +39,7 @@ struct CreateRunView: View {
                                 locationDisplay.isEmpty ? "Pick on Map" : locationDisplay,
                                 systemImage: "mappin.and.ellipse"
                             )
-                            .foregroundColor(locationDisplay.isEmpty ? .accentColor : .primary)
+                            .foregroundColor(locationDisplay.isEmpty ? .brand : .primary)
                             Spacer()
                             if !locationDisplay.isEmpty {
                                 Image(systemName: "chevron.right")

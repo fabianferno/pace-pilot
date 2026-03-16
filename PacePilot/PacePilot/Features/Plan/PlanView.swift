@@ -89,11 +89,11 @@ struct PlanView: View {
                 Text("\(calendar.component(.day, from: date))")
                     .font(.subheadline)
                     .fontWeight(isToday ? .bold : .regular)
-                    .foregroundColor(isSelected ? .black : isToday ? .accentColor : .primary)
+                    .foregroundColor(isSelected ? .black : isToday ? .brand : .primary)
                     .frame(width: 32, height: 32)
                     .background(
                         Circle()
-                            .fill(isSelected ? Color.accentColor : Color.clear)
+                            .fill(isSelected ? Color.brand : Color.clear)
                     )
 
                 // Dot markers
@@ -101,11 +101,11 @@ struct PlanView: View {
                     if hasRun {
                         Image(systemName: "shoe.fill")
                             .font(.system(size: 9))
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(.brand)
                             .rotationEffect(.degrees(25))
                     } else if hasWorkout {
                         Circle()
-                            .fill(Color.accentColor)
+                            .fill(Color.brand)
                             .frame(width: 5, height: 5)
                     }
                 }
@@ -156,7 +156,7 @@ struct PlanView: View {
                         .font(.subheadline.bold())
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
-                        .background(Color.accentColor)
+                        .background(Color.brand)
                         .foregroundColor(.black)
                         .clipShape(Capsule())
                 }
@@ -176,7 +176,7 @@ struct PlanView: View {
                     HStack(spacing: 12) {
                         Image(systemName: "figure.run")
                             .font(.title2)
-                            .foregroundColor(.accentColor)
+                            .foregroundColor(.brand)
                         VStack(alignment: .leading, spacing: 2) {
                             Text(workout.type.rawValue.capitalized)
                                 .font(.subheadline.bold())
@@ -208,7 +208,7 @@ struct PlanView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("You ran on this day!")
                     .font(.headline)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
                     .padding(.top, 4)
 
                 ForEach(dayRuns) { run in
@@ -216,7 +216,7 @@ struct PlanView: View {
                         HStack(spacing: 12) {
                             Image(systemName: "shoe.fill")
                                 .font(.title2)
-                                .foregroundColor(.accentColor)
+                                .foregroundColor(.brand)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(String(format: "%.2f km", run.distanceKm))
                                     .font(.subheadline.bold())

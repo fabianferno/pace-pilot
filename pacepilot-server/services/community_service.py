@@ -1,6 +1,9 @@
+import logging
 from db.repositories.run_repo import RunRepository
 from db.repositories.user_repo import UserRepository
 from services.strava_service import StravaService
+
+log = logging.getLogger(__name__)
 
 TIER_THRESHOLDS = [
     ("elite",       0,     240),
@@ -21,13 +24,25 @@ class CommunityService:
         if avg_pace is None:
             user = await UserRepository().find_by_id(user_id)
             if user and user.strava_connected and user.strava_access_token:
-                avg_pace = await StravaService().get_avg_run_pace_seconds_per_km(
-                    user.strava_access_token, weeks=8
-                )
+                try:
+                    avg_pace = await StravaService().get_avg_run_pace_seconds_per_km(
+                        user.strava_access_token,
+                        weeks=8,
+                        user_id=user_id,
+                        refresh_token=user.strava_refresh_token,
+                    )
+                except Exception:
+                    log.exception("Failed to fetch Strava pace for user %s", user_id)
 
-        if avg_pace is None:
-            return "discovery"
-        for tier, lo, hi in TIER_THRESHOLDS:
-            if lo <= avg_pace < hi:
-                return tier
-        return "discovery"
+        tier = "discovery"
+        if avg_pace is not None:
+            for t, lo, hi in TIER_THRESHOLDS:
+                if lo <= avg_pace < hi:
+                    tier = t
+                    break
+
+        # Persist computed tier so /api/users/me stays in sync
+        user_repo = UserRepository()
+        await user_repo.update(user_id, {"community_tier": tier})
+
+        return tier

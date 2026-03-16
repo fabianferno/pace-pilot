@@ -1,5 +1,9 @@
 import SwiftUI
 
+extension Color {
+    static let brand = Color(red: 0.667, green: 1.0, blue: 0.0)
+}
+
 @main
 struct PacePilotWatchApp: App {
     @StateObject private var connectivity = WatchConnectivityManager.shared

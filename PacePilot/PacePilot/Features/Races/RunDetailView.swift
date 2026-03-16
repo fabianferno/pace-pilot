@@ -67,7 +67,7 @@ struct RunDetailView: View {
                         )
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(currentRun.isRsvpdByUser ? Color(.systemGray5) : Color.accentColor)
+                        .background(currentRun.isRsvpdByUser ? Color(.systemGray5) : Color.brand)
                         .foregroundColor(currentRun.isRsvpdByUser ? .primary : .black)
                         .cornerRadius(14)
                     }

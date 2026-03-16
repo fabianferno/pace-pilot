@@ -18,7 +18,7 @@ struct NotificationPreferencesView: View {
                                 UIApplication.shared.open(url)
                             }
                         }
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(.brand)
                     }
                 }
             }

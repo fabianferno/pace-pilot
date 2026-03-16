@@ -62,9 +62,9 @@ struct OnboardingView: View {
         case .idle:
             Text("Tap to start").foregroundColor(.gray)
         case .connecting:
-            Text("Connecting...").foregroundColor(.accentColor)
+            Text("Connecting...").foregroundColor(.brand)
         case .active:
-            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.accentColor)
+            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.brand)
         case .disconnecting:
             Text("Finishing up...").foregroundColor(.gray)
         case .error(let msg):
@@ -78,7 +78,7 @@ struct OnboardingView: View {
         case .idle, .error:
             Button(action: { Task { await vm.startOnboarding() } }) {
                 Circle()
-                    .fill(Color.accentColor)
+                    .fill(Color.brand)
                     .frame(width: 80, height: 80)
                     .overlay(Image(systemName: "mic.fill").font(.title).foregroundColor(.black))
             }
@@ -90,7 +90,7 @@ struct OnboardingView: View {
                     .overlay(Image(systemName: "stop.fill").font(.title).foregroundColor(.white))
             }
         default:
-            ProgressView().tint(.accentColor)
+            ProgressView().tint(.brand)
         }
     }
 }

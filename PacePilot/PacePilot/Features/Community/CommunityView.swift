@@ -38,7 +38,7 @@ struct CommunityView: View {
                             HStack {
                                 Text("#\(entry.rank)")
                                     .font(.headline)
-                                    .foregroundColor(.accentColor)
+                                    .foregroundColor(.brand)
                                     .frame(width: 36)
                                 Text(entry.displayName)
                                 Spacer()
@@ -81,7 +81,7 @@ struct CommunityView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Your community, your pace")
                         .font(.title3.bold())
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(.brand)
                     Text("You're automatically placed into a tier based on your average easy-run pace over the past 4 weeks. As you run more consistently, you move up through **Discovery → Foundation → Momentum → Velocity → Elite**. Tiers update every week.")
                         .font(.caption)
                         .foregroundColor(.secondary)
@@ -104,7 +104,7 @@ struct CommunityView: View {
         HStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.title2)
-                .foregroundColor(.accentColor.opacity(0.7))
+                .foregroundColor(.brand.opacity(0.7))
                 .frame(width: 40)
             VStack(alignment: .leading, spacing: 3) {
                 Text(title).font(.subheadline.bold())
@@ -117,12 +117,12 @@ struct CommunityView: View {
     func tierBadge(_ tier: User.CommunityTier) -> some View {
         let colors: [User.CommunityTier: Color] = [
             .discovery: .secondary,
-            .foundation: .accentColor,
-            .momentum: .accentColor,
+            .foundation: .brand,
+            .momentum: .brand,
             .velocity: .orange,
             .elite: .purple
         ]
-        let color = colors[tier, default: .accentColor]
+        let color = colors[tier, default: .brand]
         return Text(tier.rawValue.capitalized)
             .font(.caption.bold())
             .padding(.horizontal, 10)

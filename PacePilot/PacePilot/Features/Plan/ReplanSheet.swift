@@ -47,7 +47,7 @@ struct ReplanSheet: View {
                             dismiss()
                         }
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
                 }
             }
         }
@@ -59,9 +59,9 @@ struct ReplanSheet: View {
         case .idle:
             Text("Tap to update your plan").foregroundColor(.gray)
         case .connecting:
-            Text("Connecting...").foregroundColor(.accentColor)
+            Text("Connecting...").foregroundColor(.brand)
         case .active:
-            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.accentColor)
+            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.brand)
         case .disconnecting:
             Text("Ending session...").foregroundColor(.gray)
         case .error(let msg):
@@ -75,7 +75,7 @@ struct ReplanSheet: View {
         case .idle, .error:
             Button(action: { Task { await vm.start() } }) {
                 Circle()
-                    .fill(Color.accentColor)
+                    .fill(Color.brand)
                     .frame(width: 72, height: 72)
                     .overlay(Image(systemName: "mic.fill").font(.title2).foregroundColor(.black))
             }
@@ -87,7 +87,7 @@ struct ReplanSheet: View {
                     .overlay(Image(systemName: "stop.fill").font(.title2).foregroundColor(.white))
             }
         default:
-            ProgressView().tint(.accentColor)
+            ProgressView().tint(.brand)
         }
     }
 }

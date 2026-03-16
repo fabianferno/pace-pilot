@@ -1,5 +1,9 @@
 import SwiftUI
 
+extension Color {
+    static let brand = Color(red: 0.667, green: 1.0, blue: 0.0)
+}
+
 extension Notification.Name {
     static let stravaConnected = Notification.Name("stravaConnected")
 }
@@ -30,6 +34,7 @@ struct PacePilotApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .tint(.brand)
                 .environmentObject(router)
                 .environmentObject(auth)
                 .environmentObject(apiClient)
@@ -79,7 +84,7 @@ struct SplashView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
                 Text("PacePilot AI")
                     .font(.largeTitle.bold())
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
                     .padding(.bottom, 24)
                 Button(action: { auth.signInWithApple() }) {
                     HStack(spacing: 14) {
@@ -122,7 +127,7 @@ struct MainTabView: View {
                 .tabItem { Label("Profile", systemImage: "person.fill") }
                 .tag(4)
         }
-        .accentColor(.accentColor)
+        .tint(.brand)
     }
 }
 

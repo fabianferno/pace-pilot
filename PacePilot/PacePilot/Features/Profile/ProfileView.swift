@@ -48,7 +48,7 @@ struct CoachChatSheet: View {
                             dismiss()
                         }
                     }
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
                 }
             }
         }
@@ -60,9 +60,9 @@ struct CoachChatSheet: View {
         case .idle:
             Text("Tap to talk to your coach").foregroundColor(.gray)
         case .connecting:
-            Text("Connecting...").foregroundColor(.accentColor)
+            Text("Connecting...").foregroundColor(.brand)
         case .active:
-            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.accentColor)
+            Text(vm.agentSpeaking ? "Coach is speaking..." : "Listening...").foregroundColor(.brand)
         case .disconnecting:
             Text("Ending session...").foregroundColor(.gray)
         case .error(let msg):
@@ -76,7 +76,7 @@ struct CoachChatSheet: View {
         case .idle, .error:
             Button(action: { Task { await vm.start() } }) {
                 Circle()
-                    .fill(Color.accentColor)
+                    .fill(Color.brand)
                     .frame(width: 72, height: 72)
                     .overlay(Image(systemName: "mic.fill").font(.title2).foregroundColor(.black))
             }
@@ -88,7 +88,7 @@ struct CoachChatSheet: View {
                     .overlay(Image(systemName: "stop.fill").font(.title2).foregroundColor(.white))
             }
         default:
-            ProgressView().tint(.accentColor)
+            ProgressView().tint(.brand)
         }
     }
 }
@@ -146,7 +146,7 @@ struct ProfileView: View {
                         }
                     }
                     .disabled(vm.isSaving)
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
                 }
             }
             .onReceive(NotificationCenter.default.publisher(for: .stravaConnected)) { _ in
@@ -219,7 +219,7 @@ struct ProfileView: View {
                     .font(.caption.bold())
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
-                    .background(isSelected ? Color.accentColor : Color(.systemGray5))
+                    .background(isSelected ? Color.brand : Color(.systemGray5))
                     .foregroundColor(isSelected ? .black : .primary)
                     .cornerRadius(8)
                 }
@@ -267,11 +267,11 @@ struct ProfileView: View {
         Section {
             Button(action: { showCoachSheet = true }) {
                 Label("Talk to Coach", systemImage: "mic.fill")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
             }
             Button(action: { showReplanSheet = true }) {
                 Label("Regenerate Training Plan", systemImage: "arrow.clockwise")
-                    .foregroundColor(.accentColor)
+                    .foregroundColor(.brand)
             }
             Text("Ask your coach to update your training plan, change your goals, or answer questions.")
                 .font(.caption)

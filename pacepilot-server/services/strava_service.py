@@ -1,7 +1,10 @@
+import logging
 import httpx
 from datetime import datetime, timedelta
 from typing import Optional
 from config.settings import get_settings
+
+log = logging.getLogger(__name__)
 
 STRAVA_TOKEN_URL = "https://www.strava.com/oauth/token"
 STRAVA_API_BASE = "https://www.strava.com/api/v3"
@@ -31,7 +34,31 @@ class StravaService:
             resp.raise_for_status()
             return resp.json()
 
-    async def get_avg_run_pace_seconds_per_km(self, access_token: str, weeks: int = 8) -> Optional[float]:
+    async def refresh_access_token(self, refresh_token: str) -> dict:
+        """Exchange a refresh token for a new access/refresh token pair.
+
+        Returns the Strava token response dict with keys:
+        access_token, refresh_token, expires_at, etc.
+        """
+        s = get_settings()
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(STRAVA_TOKEN_URL, data={
+                "client_id": s.STRAVA_CLIENT_ID,
+                "client_secret": s.STRAVA_CLIENT_SECRET,
+                "refresh_token": refresh_token,
+                "grant_type": "refresh_token",
+            })
+            resp.raise_for_status()
+            return resp.json()
+
+    async def get_avg_run_pace_seconds_per_km(
+        self,
+        access_token: str,
+        weeks: int = 8,
+        *,
+        user_id: Optional[str] = None,
+        refresh_token: Optional[str] = None,
+    ) -> Optional[float]:
         since = int((datetime.utcnow() - timedelta(weeks=weeks)).timestamp())
         async with httpx.AsyncClient() as client:
             resp = await client.get(
@@ -39,6 +66,14 @@ class StravaService:
                 headers={"Authorization": f"Bearer {access_token}"},
                 params={"after": since, "per_page": 100},
             )
+            # Attempt token refresh on 401
+            if resp.status_code == 401 and refresh_token and user_id:
+                access_token = await self._refresh_and_persist(user_id, refresh_token)
+                resp = await client.get(
+                    f"{STRAVA_API_BASE}/athlete/activities",
+                    headers={"Authorization": f"Bearer {access_token}"},
+                    params={"after": since, "per_page": 100},
+                )
             resp.raise_for_status()
             activities = resp.json()
         paces = [
@@ -65,3 +100,15 @@ class StravaService:
             )
             resp.raise_for_status()
             return resp.json()
+
+    async def _refresh_and_persist(self, user_id: str, refresh_token: str) -> str:
+        """Refresh the Strava token and persist the new tokens to the DB."""
+        from db.repositories.user_repo import UserRepository
+
+        log.info("Refreshing expired Strava token for user %s", user_id)
+        token_data = await self.refresh_access_token(refresh_token)
+        await UserRepository().update(user_id, {
+            "strava_access_token": token_data["access_token"],
+            "strava_refresh_token": token_data["refresh_token"],
+        })
+        return token_data["access_token"]

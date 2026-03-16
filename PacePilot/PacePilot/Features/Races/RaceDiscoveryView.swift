@@ -49,7 +49,7 @@ struct RunDiscoveryView: View {
                                 .font(.caption)
                         }
                         .toggleStyle(.button)
-                        .tint(.accentColor)
+                        .tint(.brand)
                     }
                 }
                 ToolbarItem(placement: .primaryAction) {
@@ -98,7 +98,7 @@ struct RunDiscoveryView: View {
             Spacer()
             Image(systemName: "figure.run.circle")
                 .font(.system(size: 60))
-                .foregroundColor(.accentColor.opacity(0.8))
+                .foregroundColor(.brand.opacity(0.8))
             VStack(spacing: 8) {
                 Text(filterByCity ? "No Runs in \(userCity)" : "No Runs Yet")
                     .font(.title2.bold())
@@ -127,7 +127,7 @@ private struct RunRow: View {
                 if run.isRsvpdByUser {
                     Label("Going", systemImage: "checkmark.circle.fill")
                         .font(.caption.bold())
-                        .foregroundColor(.accentColor)
+                        .foregroundColor(.brand)
                 }
             }
             HStack(spacing: 12) {
